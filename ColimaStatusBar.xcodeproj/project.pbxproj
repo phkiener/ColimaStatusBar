@@ -1,0 +1,546 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		FABAA4292D4FAA820035563E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FABAA40F2D4FAA810035563E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FABAA4162D4FAA810035563E;
+			remoteInfo = ColimaStatusBar;
+		};
+		FABAA4332D4FAA820035563E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FABAA40F2D4FAA810035563E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FABAA4162D4FAA810035563E;
+			remoteInfo = ColimaStatusBar;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		FABAA4172D4FAA810035563E /* ColimaStatusBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColimaStatusBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FABAA4282D4FAA820035563E /* ColimaStatusBarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ColimaStatusBarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FABAA4322D4FAA820035563E /* ColimaStatusBarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ColimaStatusBarUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		FABAA4192D4FAA810035563E /* ColimaStatusBar */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ColimaStatusBar;
+			sourceTree = "<group>";
+		};
+		FABAA42B2D4FAA820035563E /* ColimaStatusBarTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ColimaStatusBarTests;
+			sourceTree = "<group>";
+		};
+		FABAA4352D4FAA820035563E /* ColimaStatusBarUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ColimaStatusBarUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FABAA4142D4FAA810035563E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FABAA4252D4FAA820035563E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FABAA42F2D4FAA820035563E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FABAA40E2D4FAA810035563E = {
+			isa = PBXGroup;
+			children = (
+				FABAA4192D4FAA810035563E /* ColimaStatusBar */,
+				FABAA42B2D4FAA820035563E /* ColimaStatusBarTests */,
+				FABAA4352D4FAA820035563E /* ColimaStatusBarUITests */,
+				FABAA4182D4FAA810035563E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FABAA4182D4FAA810035563E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FABAA4172D4FAA810035563E /* ColimaStatusBar.app */,
+				FABAA4282D4FAA820035563E /* ColimaStatusBarTests.xctest */,
+				FABAA4322D4FAA820035563E /* ColimaStatusBarUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FABAA4162D4FAA810035563E /* ColimaStatusBar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FABAA43C2D4FAA820035563E /* Build configuration list for PBXNativeTarget "ColimaStatusBar" */;
+			buildPhases = (
+				FABAA4132D4FAA810035563E /* Sources */,
+				FABAA4142D4FAA810035563E /* Frameworks */,
+				FABAA4152D4FAA810035563E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				FABAA4192D4FAA810035563E /* ColimaStatusBar */,
+			);
+			name = ColimaStatusBar;
+			packageProductDependencies = (
+			);
+			productName = ColimaStatusBar;
+			productReference = FABAA4172D4FAA810035563E /* ColimaStatusBar.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FABAA4272D4FAA820035563E /* ColimaStatusBarTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FABAA43F2D4FAA820035563E /* Build configuration list for PBXNativeTarget "ColimaStatusBarTests" */;
+			buildPhases = (
+				FABAA4242D4FAA820035563E /* Sources */,
+				FABAA4252D4FAA820035563E /* Frameworks */,
+				FABAA4262D4FAA820035563E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FABAA42A2D4FAA820035563E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FABAA42B2D4FAA820035563E /* ColimaStatusBarTests */,
+			);
+			name = ColimaStatusBarTests;
+			packageProductDependencies = (
+			);
+			productName = ColimaStatusBarTests;
+			productReference = FABAA4282D4FAA820035563E /* ColimaStatusBarTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		FABAA4312D4FAA820035563E /* ColimaStatusBarUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FABAA4422D4FAA820035563E /* Build configuration list for PBXNativeTarget "ColimaStatusBarUITests" */;
+			buildPhases = (
+				FABAA42E2D4FAA820035563E /* Sources */,
+				FABAA42F2D4FAA820035563E /* Frameworks */,
+				FABAA4302D4FAA820035563E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FABAA4342D4FAA820035563E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FABAA4352D4FAA820035563E /* ColimaStatusBarUITests */,
+			);
+			name = ColimaStatusBarUITests;
+			packageProductDependencies = (
+			);
+			productName = ColimaStatusBarUITests;
+			productReference = FABAA4322D4FAA820035563E /* ColimaStatusBarUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FABAA40F2D4FAA810035563E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					FABAA4162D4FAA810035563E = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					FABAA4272D4FAA820035563E = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = FABAA4162D4FAA810035563E;
+					};
+					FABAA4312D4FAA820035563E = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = FABAA4162D4FAA810035563E;
+					};
+				};
+			};
+			buildConfigurationList = FABAA4122D4FAA810035563E /* Build configuration list for PBXProject "ColimaStatusBar" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FABAA40E2D4FAA810035563E;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = FABAA4182D4FAA810035563E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FABAA4162D4FAA810035563E /* ColimaStatusBar */,
+				FABAA4272D4FAA820035563E /* ColimaStatusBarTests */,
+				FABAA4312D4FAA820035563E /* ColimaStatusBarUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FABAA4152D4FAA810035563E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FABAA4262D4FAA820035563E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FABAA4302D4FAA820035563E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FABAA4132D4FAA810035563E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FABAA4242D4FAA820035563E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FABAA42E2D4FAA820035563E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FABAA42A2D4FAA820035563E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FABAA4162D4FAA810035563E /* ColimaStatusBar */;
+			targetProxy = FABAA4292D4FAA820035563E /* PBXContainerItemProxy */;
+		};
+		FABAA4342D4FAA820035563E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FABAA4162D4FAA810035563E /* ColimaStatusBar */;
+			targetProxy = FABAA4332D4FAA820035563E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		FABAA43A2D4FAA820035563E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		FABAA43B2D4FAA820035563E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		FABAA43D2D4FAA820035563E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ColimaStatusBar/ColimaStatusBar.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"ColimaStatusBar/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.phkiener.ColimaStatusBar;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		FABAA43E2D4FAA820035563E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ColimaStatusBar/ColimaStatusBar.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"ColimaStatusBar/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.phkiener.ColimaStatusBar;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		FABAA4402D4FAA820035563E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.phkiener.ColimaStatusBarTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ColimaStatusBar.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ColimaStatusBar";
+			};
+			name = Debug;
+		};
+		FABAA4412D4FAA820035563E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.phkiener.ColimaStatusBarTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ColimaStatusBar.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ColimaStatusBar";
+			};
+			name = Release;
+		};
+		FABAA4432D4FAA820035563E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.phkiener.ColimaStatusBarUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = ColimaStatusBar;
+			};
+			name = Debug;
+		};
+		FABAA4442D4FAA820035563E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.phkiener.ColimaStatusBarUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = ColimaStatusBar;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FABAA4122D4FAA810035563E /* Build configuration list for PBXProject "ColimaStatusBar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FABAA43A2D4FAA820035563E /* Debug */,
+				FABAA43B2D4FAA820035563E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FABAA43C2D4FAA820035563E /* Build configuration list for PBXNativeTarget "ColimaStatusBar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FABAA43D2D4FAA820035563E /* Debug */,
+				FABAA43E2D4FAA820035563E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FABAA43F2D4FAA820035563E /* Build configuration list for PBXNativeTarget "ColimaStatusBarTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FABAA4402D4FAA820035563E /* Debug */,
+				FABAA4412D4FAA820035563E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FABAA4422D4FAA820035563E /* Build configuration list for PBXNativeTarget "ColimaStatusBarUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FABAA4432D4FAA820035563E /* Debug */,
+				FABAA4442D4FAA820035563E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FABAA40F2D4FAA810035563E /* Project object */;
+}
