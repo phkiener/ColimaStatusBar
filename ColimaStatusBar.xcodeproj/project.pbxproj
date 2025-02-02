@@ -35,16 +35,6 @@
 			path = ColimaStatusBar;
 			sourceTree = "<group>";
 		};
-		FABAA42B2D4FAA820035563E /* ColimaStatusBarTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ColimaStatusBarTests;
-			sourceTree = "<group>";
-		};
-		FABAA4352D4FAA820035563E /* ColimaStatusBarUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ColimaStatusBarUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,8 +66,6 @@
 			isa = PBXGroup;
 			children = (
 				FABAA4192D4FAA810035563E /* ColimaStatusBar */,
-				FABAA42B2D4FAA820035563E /* ColimaStatusBarTests */,
-				FABAA4352D4FAA820035563E /* ColimaStatusBarUITests */,
 				FABAA4182D4FAA810035563E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -130,9 +118,6 @@
 			dependencies = (
 				FABAA42A2D4FAA820035563E /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				FABAA42B2D4FAA820035563E /* ColimaStatusBarTests */,
-			);
 			name = ColimaStatusBarTests;
 			packageProductDependencies = (
 			);
@@ -152,9 +137,6 @@
 			);
 			dependencies = (
 				FABAA4342D4FAA820035563E /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				FABAA4352D4FAA820035563E /* ColimaStatusBarUITests */,
 			);
 			name = ColimaStatusBarUITests;
 			packageProductDependencies = (
