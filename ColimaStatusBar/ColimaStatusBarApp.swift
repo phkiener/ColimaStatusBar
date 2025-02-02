@@ -17,19 +17,28 @@ struct ColimaStatusBarApp: App {
                 Text("Colima is stopping...")
                 
             }
-            Divider()
             
+            Divider()
             if (interactor.isRunning()) {
-                ControlGroup("mssql-local") {
-                    Text("Bound to port: 1234")
-                    Divider()
-                    Button("Quit") {
-                        print("Quitting mssql-local")
+                
+                let containers = interactor.getRunningContainers()
+                if (containers.isEmpty) {
+                    Text("No containers running")
+                }
+                else {
+                    Text("Running containers")
+                    ForEach(interactor.getRunningContainers(), id: \.name) { container in
+                        Button("\(container.image): \(container.name)") {
+                            NSPasteboard.general.clearContents()
+                            NSPasteboard.general.setString(container.name, forType: .string)
+                        }
+                        .help("Copy name of container to clipboard")
                     }
                 }
                 
                 Divider()
             }
+            
             Button("Exit") { exit(EXIT_SUCCESS); }.keyboardShortcut("q")
         }
     }
