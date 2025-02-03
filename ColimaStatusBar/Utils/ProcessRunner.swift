@@ -31,7 +31,9 @@ struct ProcessRunner {
     
     private static func execute(program: String, args: [String]) async throws -> ProcessResult {
         let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/bin/zsh")
+        
+        let shell = ProcessInfo.processInfo.environment["SHELL"] ?? "/bin/zsh"
+        process.executableURL = URL(fileURLWithPath: shell)
         process.arguments = ["-l", "-c", "\(program) \(args.joined(separator: " "))"]
         
         let outputStream = Pipe()
