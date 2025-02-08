@@ -11,6 +11,9 @@
                 <TrayIcon.Menu>
                     <NativeMenu>
                         <NativeMenuItem Header="{Binding IsRunning, Mode=OneWay, Converter={x:Static colimaStatusBar:App.StatusTextConverter}}" />
+                        <NativeMenuItemSeparator />
+                        <!-- Dynamically added items will be put in here -->
+                        <NativeMenuItemSeparator />
                         <NativeMenuItem Header="Quit" Command="{Binding Quit}" />
                     </NativeMenu>
                 </TrayIcon.Menu>

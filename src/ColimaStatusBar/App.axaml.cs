@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Specialized;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
@@ -23,13 +25,49 @@ public sealed partial class App : Application, IDisposable
     {
         interactor = new ColimaInteractor(TimeSpan.FromSeconds(5));
         DataContext = interactor;
+        interactor.Containers.CollectionChanged += OnContainersChanged;
         
         base.OnFrameworkInitializationCompleted();
     }
 
+    private void OnContainersChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        var tray = TrayIcon.GetIcons(this);
+        if (tray is not [var icon])
+        {
+            return;
+        }
+        
+        var menuItems = icon.Menu?.Items;
+        if (menuItems is null)
+        {
+            return;
+        }
+
+        var toRemove = menuItems.Where(static i => i is NativeMenuItem { ToggleType: NativeMenuItemToggleType.CheckBox }).ToList();
+        foreach (var item in toRemove)
+        {
+            menuItems.Remove(item);
+        }
+
+        foreach (var item in interactor?.Containers.ToList() ?? [])
+        {
+            var index = menuItems.IndexOf(menuItems.OfType<NativeMenuItemSeparator>().Last());
+            var menuItem = new NativeMenuItem($"{item.Name}: {item.Image}") { ToggleType = NativeMenuItemToggleType.CheckBox, IsChecked = true };
+            
+            menuItems.Insert(index, menuItem);
+        }
+    }
+
     public void Dispose()
     {
-        interactor?.Dispose();
+        if (interactor is null)
+        {
+            return;
+        }
+        
+        interactor.Containers.CollectionChanged -= OnContainersChanged;
+        interactor.Dispose();
     }
 }
 
