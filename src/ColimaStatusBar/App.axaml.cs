@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform;
+using Avalonia.Styling;
 
 namespace ColimaStatusBar;
 
@@ -13,8 +14,8 @@ public sealed partial class App : Application, IDisposable
 {
     private ColimaInteractor? interactor;
 
-    public static readonly FuncValueConverter<bool, string> StatusTextConverter = new(static b => b ? "Running" : "Stopped");
-    public static readonly FuncValueConverter<bool, WindowIcon> StatusImageConverter = new(static b => b ? new WindowIcon(AssetLoader.Open(new Uri("avares://ColimaStatusBar/Assets/cube.ico"))) : new WindowIcon(AssetLoader.Open(new Uri("avares://ColimaStatusBar/Assets/cube-outline.ico"))));
+    public static readonly FuncValueConverter<bool, string> StatusTextConverter = new(RenderStatus);
+    public static readonly FuncValueConverter<bool, WindowIcon> StatusImageConverter = new(ChooseIcon);
 
     public override void Initialize()
     {
@@ -28,6 +29,21 @@ public sealed partial class App : Application, IDisposable
         interactor.Containers.CollectionChanged += OnContainersChanged;
         
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private static string RenderStatus(bool isRunning)
+    {
+        return isRunning ? "Running" : "Stopped";
+    }
+
+    private static WindowIcon ChooseIcon(bool isRunning)
+    {
+        var isDark = Current?.ActualThemeVariant == ThemeVariant.Dark;
+        var resourcePath = isDark
+            ? (isRunning ? "Assets/cube-white.ico" : "Assets/cube-white-outline.ico")
+            : (isRunning ? "Assets/cube.ico" : "Assets/cube-outline.ico");
+        
+        return new WindowIcon(AssetLoader.Open(new Uri($"avares://ColimaStatusBar/{resourcePath}")));
     }
 
     private void OnContainersChanged(object? sender, NotifyCollectionChangedEventArgs e)

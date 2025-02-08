@@ -54,8 +54,7 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
         {
             try
             {
-                await timer.WaitForNextTickAsync(backgroundTask.Token);
-                using var clientConfiguration = Environment.GetEnvironmentVariable("DOCKER_HOME") is { } uri
+                using var clientConfiguration = Environment.GetEnvironmentVariable("DOCKER_HOST") is { } uri
                     ? new DockerClientConfiguration(new Uri(uri))
                     : new DockerClientConfiguration();
 
@@ -66,7 +65,7 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
                     await client.System.PingAsync(backgroundTask.Token);
                     IsRunning = true;
                 }
-                catch
+                catch (DockerApiException)
                 {
                     IsRunning = false;
                 }
@@ -95,10 +94,12 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
                         Dispatcher.UIThread.Invoke(() => containers.Remove(container));
                     }
                 }
+                
+                await timer.WaitForNextTickAsync(backgroundTask.Token);
             }
             catch
             {
-                // Ignore it.
+                // Some error handling would be nice, eh?
             }
         }
     }
