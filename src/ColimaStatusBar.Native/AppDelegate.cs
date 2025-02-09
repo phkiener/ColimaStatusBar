@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace ColimaStatusBar.Native;
 
@@ -15,9 +16,6 @@ public sealed class AppDelegate : NSApplicationDelegate
 
     public override void DidFinishLaunching(NSNotification notification)
     {
-        interactor = new ColimaInteractor(TimeSpan.FromSeconds(1));
-        interactor.PropertyChanged += Observe;
-        Observe(interactor, i => i.IsRunning, UpdateStatus);
         
         statusItem = NSStatusBar.SystemStatusBar.CreateStatusItem(NSStatusItemLength.Variable);
         statusItem.Button.Image = NSImage.GetSystemSymbol("shippingbox", accessibilityDescription: null);
@@ -30,6 +28,22 @@ public sealed class AppDelegate : NSApplicationDelegate
         statusBarMenu.AddItem(quit);
         
         statusItem.Menu = statusBarMenu;
+
+        interactor = new ColimaInteractor(TimeSpan.FromSeconds(1));
+        interactor.PropertyChanged += Observe;
+        Binding(status, s => s.Title, interactor, i => i.IsRunning, static b => b ? "Running" : "Stopped");
+        Binding(statusItem.Button, s => s.Image, interactor, i => i.IsRunning, static b => NSImage.GetSystemSymbol(b ? "shippingbox.fill" : "shippingbox", accessibilityDescription: null));
+    }
+
+    private void Binding<T, TValue, T2, TValue2>(T target, Expression<Func<T, TValue>> targetProperty, T2 source, Expression<Func<T2, TValue2>> sourceProperty, Func<TValue2, TValue> convert)
+    {
+        var subscription = new Subscription(
+            source,
+            ((MemberExpression)sourceProperty.Body).Member.Name,
+            obj => sourceProperty.Compile()((T2)obj)!,
+            obj => (((MemberExpression)targetProperty.Body).Member as PropertyInfo)!.SetValue(target, convert((TValue2)obj)));
+
+        subscriptions.Add(subscription);
     }
 
     protected override void Dispose(bool disposing)
@@ -51,30 +65,6 @@ public sealed class AppDelegate : NSApplicationDelegate
         {
             var value = matchingSubscription.Receiver(sender!);
             InvokeOnMainThread(() => matchingSubscription.Handle(value));
-        }
-    }
-
-    private void Observe<T, TValue>(T sender, Expression<Func<T, TValue>> expression, Action<TValue> action)
-    {
-        var subscription = new Subscription(
-            sender,
-            ((MemberExpression)expression.Body).Member.Name,
-            obj => expression.Compile()((T)obj)!,
-            obj => action((TValue)obj));
-
-        subscriptions.Add(subscription);
-    }
-
-    private void UpdateStatus(bool isRunning)
-    {
-        if (status is not null)
-        {
-            status.Title = isRunning ? "Running" : "Stopped";
-        }
-
-        if (statusItem is not null)
-        {
-            statusItem.Button.Image = NSImage.GetSystemSymbol(isRunning ? "shippingbox.fill" : "shippingbox", accessibilityDescription: null);
         }
     }
 
