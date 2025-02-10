@@ -1,10 +1,11 @@
 using Reactive;
+using Reactive.Extensions;
 
 namespace ColimaStatusBar.Native;
 
 public sealed class AppDelegate : NSApplicationDelegate
 {
-    private Observer<ColimaInteractor>? observer;
+    private Reactive.IObserver<ColimaInteractor>? observer;
     private ColimaInteractor interactor = null!;
     private NSStatusItem? statusItem;
     private NSMenu? statusBarMenu;
@@ -14,7 +15,7 @@ public sealed class AppDelegate : NSApplicationDelegate
     {
         statusItem = NSStatusBar.SystemStatusBar.CreateStatusItem(NSStatusItemLength.Variable);
         statusItem.Button.Image = NSImage.GetSystemSymbol("shippingbox", accessibilityDescription: null);
-        
+
         statusBarMenu = new NSMenu();
         status = new NSMenuItem("Stopped");
         statusBarMenu.AddItem(status);
@@ -25,7 +26,7 @@ public sealed class AppDelegate : NSApplicationDelegate
         statusItem.Menu = statusBarMenu;
 
         interactor = new ColimaInteractor(TimeSpan.FromSeconds(1));
-        observer = new Observer<ColimaInteractor>(interactor);
+        observer = Observer.Create(interactor);
         observer.Subscribe(i => i.IsRunning)
             .Bind(status, s => s.Title, static isRunning => isRunning ? "Running" : "Stopped")
             .Bind(statusItem.Button, b => b.Image, static isRunning => NSImage.GetSystemSymbol(isRunning ? "shippingbox.fill" : "shippingbox", accessibilityDescription: null))
