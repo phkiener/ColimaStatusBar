@@ -26,6 +26,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MacOS", "MacOS", "{505F2FA1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColimaStatusBar.Native", "src\ColimaStatusBar.Native\ColimaStatusBar.Native.csproj", "{9F1CE05A-CB3A-4B80-A7C5-5E355E617375}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reactive", "src\Reactive\Reactive.csproj", "{B25E55D3-AD4D-48B6-8A77-0B1D8ABF4B26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{9F1CE05A-CB3A-4B80-A7C5-5E355E617375}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F1CE05A-CB3A-4B80-A7C5-5E355E617375}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F1CE05A-CB3A-4B80-A7C5-5E355E617375}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B25E55D3-AD4D-48B6-8A77-0B1D8ABF4B26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B25E55D3-AD4D-48B6-8A77-0B1D8ABF4B26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B25E55D3-AD4D-48B6-8A77-0B1D8ABF4B26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B25E55D3-AD4D-48B6-8A77-0B1D8ABF4B26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{67B6A867-A44E-4F0A-8FB9-BF51EEF4F8F3} = {415BAC5A-B1E6-4C03-8043-BA2C8C2516F1}
