@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Docker.DotNet;
+using Docker.DotNet.Models;
 
 namespace ColimaStatusBar;
 
@@ -19,6 +20,9 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
 
     private bool isRunning;
     public bool IsRunning { get => isRunning; private set => SetField(ref isRunning, value); }
+
+    private Container[] containers = [];
+    public Container[] Containers { get => containers; private set => SetField(ref containers, value, ArrayEqualityComparer<Container>.Instance); }
 
     public void Quit()
     {
@@ -48,30 +52,13 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
                     IsRunning = false;
                 }
 
-                //if (isRunning)
-                //{
-                //    var rawContainers = await client.Containers.ListContainersAsync(new ContainersListParameters(), backgroundTask.Token);
-                //    foreach (var rawContainer in rawContainers)
-                //    {
-                //        var container = new Container(rawContainer.ID, rawContainer.Names.First(), rawContainer.Image);
-                //        var matchingContainer = containers.SingleOrDefault(c => c.Id == container.Id);
-                //        if (matchingContainer is null)
-                //        {
-                //            Dispatcher.UIThread.Invoke(() => containers.Add(container));
-                //        }
-                //        else if (matchingContainer.Image != container.Image || matchingContainer.Name != container.Name)
-                //        {
-                //            Dispatcher.UIThread.Invoke(() => containers.Remove(matchingContainer));
-                //            Dispatcher.UIThread.Invoke(() => containers.Add(container));
-                //        }
-                //    }
-                //
-                //    var obsoleteContainers = containers.Where(c => rawContainers.All(rc => rc.ID != c.Id)).ToList();
-                //    foreach (var container in obsoleteContainers)
-                //    {
-                //        Dispatcher.UIThread.Invoke(() => containers.Remove(container));
-                //    }
-                //}
+                if (isRunning)
+                {
+                    var rawContainers = await client.Containers.ListContainersAsync(new ContainersListParameters(), backgroundTask.Token);
+                    var currentContainers = rawContainers.Select(c => new Container(c.ID, c.Names.First(), c.Image)).ToArray();
+                    
+                    Containers = currentContainers;
+                }
                 
                 await timer.WaitForNextTickAsync(backgroundTask.Token);
             }
@@ -89,14 +76,24 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private void SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    private void SetField<T>(ref T field, T value, IEqualityComparer<T>? equalityComparer = null, [CallerMemberName] string? propertyName = null)
     {
-        if (EqualityComparer<T>.Default.Equals(field, value))
+        var comparer = equalityComparer ?? EqualityComparer<T>.Default;
+        if (comparer.Equals(field, value))
         {
             return;
         }
 
         field = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private sealed class ArrayEqualityComparer<T> : IEqualityComparer<T[]> where T : IEquatable<T>
+    {
+        public static ArrayEqualityComparer<T> Instance { get; } = new();
+        
+        public bool Equals(T[]? x, T[]? y) => x is null ? y is null : y is not null && x.SequenceEqual(y);
+
+        public int GetHashCode(T[] obj) => obj.Aggregate(obj.Length.GetHashCode(), HashCode.Combine);
     }
 }
