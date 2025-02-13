@@ -1,4 +1,8 @@
 # Colima StatusBar
 
 A small menubar widget to show the status of [colima](https://github.com/abiosoft/colima).
-Plus: You can start/stop the runtime as well as see all running containers.
+Nothing too fancy, really.
+
+![Screenshot](doc/screenshot.png)
+
+You can click on a container to copy its name!

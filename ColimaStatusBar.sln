@@ -15,13 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{67B6A867
 		build\bundle.sh = build\bundle.sh
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{2BC32885-4DA7-47BA-8A67-723316902F0A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MacOS", "MacOS", "{505F2FA1-751B-4522-83C1-39D4033729E0}"
-	ProjectSection(SolutionItems) = preProject
-		deploy\osx\Info.plist = deploy\osx\Info.plist
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColimaStatusBar", "src\ColimaStatusBar\ColimaStatusBar.csproj", "{9F1CE05A-CB3A-4B80-A7C5-5E355E617375}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reactive", "src\Reactive\Reactive.csproj", "{B25E55D3-AD4D-48B6-8A77-0B1D8ABF4B26}"
@@ -46,7 +39,5 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{67B6A867-A44E-4F0A-8FB9-BF51EEF4F8F3} = {415BAC5A-B1E6-4C03-8043-BA2C8C2516F1}
-		{2BC32885-4DA7-47BA-8A67-723316902F0A} = {415BAC5A-B1E6-4C03-8043-BA2C8C2516F1}
-		{505F2FA1-751B-4522-83C1-39D4033729E0} = {2BC32885-4DA7-47BA-8A67-723316902F0A}
 	EndGlobalSection
 EndGlobal

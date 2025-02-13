@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
+<plist>
   <dict>
-    <key>CFBundleVersion</key>
-    <string>1</string>
+    <!-- Categorization -->
     <key>CFBundlePackageType</key>
     <string>APPL</string>
-    <key>NSPrincipalClass</key>
-    <string>NSApplication</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.developer-tools</string>
+    
+    <!-- Identification -->
+    <key>CFBundleIdentifier</key>
+    <string>ch.phkiener.colimastatusbar</string>
+    
+    <!-- Naming -->
+    <key>CFBundleDisplayName</key>
+    <string>Colima StatusBar</string>
+    
+    <!-- Versioning -->
+    <key>CFBundleVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>NSHumanReadableCopyright</key>
+    <string>(c) 2025 Philipp Kiener</string>
   </dict>
 </plist>

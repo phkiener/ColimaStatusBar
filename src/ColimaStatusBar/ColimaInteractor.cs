@@ -23,11 +23,6 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
 
     private Container[] containers = [];
     public Container[] Containers { get => containers; private set => SetField(ref containers, value, ArrayEqualityComparer<Container>.Instance); }
-
-    public void Quit()
-    {
-        Environment.Exit(0);
-    }
     
     private async void RefreshStatus()
     {
