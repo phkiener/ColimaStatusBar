@@ -18,7 +18,7 @@ public sealed class StatusBarIcon : IDisposable
 
         observer.Backfill();
     }
-    
+
     public NSStatusItem Handle { get; }
 
     private static NSImage? GetStatusImage(bool isRunning)

@@ -11,7 +11,7 @@ public sealed class AppDelegate(ColimaInteractor colimaInteractor) : NSApplicati
     {
         statusBarIcon = new StatusBarIcon(NSStatusBar.SystemStatusBar, colimaInteractor);
         statusBarMenu = new StatusBarMenu(colimaInteractor);
-
+        
         statusBarIcon.Handle.Menu = statusBarMenu.Handle;
     }
 

@@ -31,10 +31,8 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
         {
             try
             {
-                using var clientConfiguration = Environment.GetEnvironmentVariable("DOCKER_HOST") is { } uri
-                    ? new DockerClientConfiguration(new Uri(uri))
-                    : new DockerClientConfiguration();
-
+                var socketPath = $"unix://{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}/.colima/default/docker.sock";
+                using var clientConfiguration = new DockerClientConfiguration(new Uri(socketPath));
                 using var client = clientConfiguration.CreateClient();
 
                 try
@@ -57,9 +55,10 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
                 
                 await timer.WaitForNextTickAsync(backgroundTask.Token);
             }
-            catch
+            catch (Exception e)
             {
                 // Some error handling would be nice, eh?
+                _ = e;
             }
         }
     }

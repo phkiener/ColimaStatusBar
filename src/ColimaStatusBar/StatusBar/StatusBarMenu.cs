@@ -56,22 +56,15 @@ public sealed class StatusBarMenu : IDisposable
 
     private sealed class ContainerItem : NSMenuItem
     {
-        private readonly Container container;
-
-        public ContainerItem(Container container) : base(title: $"{container.Name}: {container.Image}", HandleClick)
+        public ContainerItem(Container container) : base(title: $"{container.Name}: {container.Image}", (_, _) => CopyToClipboard(container.Name))
         {
-            this.container = container;
-            
             ToolTip = "Copy container name";
         }
+    }
 
-        private static void HandleClick(object? sender, EventArgs e)
-        {
-            var containerItem = (ContainerItem)sender!;
-            var containerName = containerItem.container.Name;
-            
-            NSPasteboard.GeneralPasteboard.ClearContents();
-            NSPasteboard.GeneralPasteboard.SetDataForType(NSData.FromString(containerName), NSPasteboardType.String.GetConstant());
-        }
+    private static void CopyToClipboard(string text)
+    {
+        NSPasteboard.GeneralPasteboard.ClearContents();
+        NSPasteboard.GeneralPasteboard.SetDataForType(NSData.FromString(text), NSPasteboardType.String.GetConstant());
     }
 }
