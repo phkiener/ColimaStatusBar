@@ -5,7 +5,7 @@ using Docker.DotNet.Models;
 
 namespace ColimaStatusBar;
 
-public sealed record Container(string Id, string Name, string Image);
+public sealed record Container(string Name, string Image);
 
 public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
 {
@@ -48,7 +48,7 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
                 if (isRunning)
                 {
                     var rawContainers = await client.Containers.ListContainersAsync(new ContainersListParameters(), backgroundTask.Token);
-                    var currentContainers = rawContainers.Select(c => new Container(c.ID, c.Names.First(), c.Image)).ToArray();
+                    var currentContainers = rawContainers.Select(c => new Container(c.Names.First(), c.Image)).ToArray();
                     
                     Containers = currentContainers;
                 }
