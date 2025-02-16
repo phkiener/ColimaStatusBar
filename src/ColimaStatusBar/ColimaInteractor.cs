@@ -41,7 +41,7 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
                     await client.System.PingAsync(backgroundTask.Token);
                     IsRunning = true;
                 }
-                catch (DockerApiException)
+                catch (Exception)
                 {
                     IsRunning = false;
                 }

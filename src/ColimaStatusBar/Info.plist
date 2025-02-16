@@ -7,7 +7,7 @@
     <string>APPL</string>
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.developer-tools</string>
-    
+
     <!-- Identification -->
     <key>CFBundleIdentifier</key>
     <string>ch.phkiener.colimastatusbar</string>
