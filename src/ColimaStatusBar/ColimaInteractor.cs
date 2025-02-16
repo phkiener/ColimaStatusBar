@@ -31,7 +31,8 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
         {
             try
             {
-                var socketPath = $"unix://{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}/.colima/default/docker.sock";
+
+                var socketPath = GetSocketPath();
                 using var clientConfiguration = new DockerClientConfiguration(new Uri(socketPath));
                 using var client = clientConfiguration.CreateClient();
 
@@ -61,6 +62,21 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
                 _ = e;
             }
         }
+    }
+
+    private static string GetSocketPath()
+    {
+        if (Environment.GetEnvironmentVariable("DOCKER_HOST") is { } dockerHost)
+        {
+            return dockerHost;
+        }
+
+        if (Environment.GetEnvironmentVariable("COLIMA_HOME") is { } colimaHome)
+        {
+            return $"{colimaHome}/defaul/docker.sock";
+        }
+        
+        return $"unix://{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}/.colima/default/docker.sock";
     }
 
     public void Dispose()
