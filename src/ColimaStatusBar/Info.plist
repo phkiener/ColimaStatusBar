@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist>
-  <dict>
-    <!-- Categorization -->
-    <key>CFBundlePackageType</key>
-    <string>APPL</string>
-    <key>LSApplicationCategoryType</key>
-    <string>public.app-category.developer-tools</string>
-    <key>LSUIElement</key>
-    <true/>
-
-    <!-- Identification -->
-    <key>CFBundleIdentifier</key>
-    <string>ch.phkiener.colimastatusbar</string>
-    
-    <!-- Naming -->
-    <key>CFBundleDisplayName</key>
-    <string>Colima StatusBar</string>
-    
-    <!-- Versioning -->
-    <key>CFBundleVersionString</key>
-    <string>2.0.1</string>
-    <key>CFBundleShortVersionString</key>
-    <string>2.0.1</string>
-    <key>NSHumanReadableCopyright</key>
-    <string>(c) 2025 Philipp Kiener</string>
-  </dict>
+<plist version="1.0">
+<dict>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.developer-tools</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>CFBundleIdentifier</key>
+	<string>ch.phkiener.colimastatusbar</string>
+	<key>CFBundleDisplayName</key>
+	<string>Colima StatusBar</string>
+	<key>CFBundleVersionString</key>
+	<string>2.1.0</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.1.0</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>(c) 2025 Philipp Kiener</string>
+</dict>
 </plist>
