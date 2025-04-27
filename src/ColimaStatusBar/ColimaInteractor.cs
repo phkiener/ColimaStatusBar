@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Docker.DotNet;
 using Docker.DotNet.Models;
+using ServiceManagement;
 
 namespace ColimaStatusBar;
 
@@ -23,9 +24,29 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
 
     private Container[] containers = [];
     public Container[] Containers { get => containers; private set => SetField(ref containers, value, ArrayEqualityComparer<Container>.Instance); }
+
+    private bool isLaunchedAtLogin;
+    public bool IsLaunchedAtLogin { get => isLaunchedAtLogin; private set => SetField(ref isLaunchedAtLogin, value); }
+
+    public void SetLaunchAtLogin(bool active)
+    {
+        IsLaunchedAtLogin = active;
+
+        if (active)
+        {
+            SMAppService.MainApp.Register();
+        }
+        else
+        {
+            SMAppService.MainApp.Unregister();
+        }
+        
+    }
     
     private async void RefreshStatus()
     {
+        IsLaunchedAtLogin = SMAppService.MainApp.Status is SMAppServiceStatus.Enabled;
+
         using var timer = new PeriodicTimer(refreshInterval);
         while (!backgroundTask.IsCancellationRequested)
         {

@@ -14,6 +14,15 @@ public sealed class StatusBarMenu : IDisposable
         Handle = new NSMenu();
         Handle.AddItem(new NSMenuItem());
         Handle.AddItem(NSMenuItem.SeparatorItem);
+
+        var settingsItem = new NSMenuItem(
+            "Launch at login",
+            (_, _) => colimaInteractor.SetLaunchAtLogin(active: !colimaInteractor.IsLaunchedAtLogin))
+        {
+            State = NSCellStateValue.Off
+        };
+
+        Handle.AddItem(settingsItem);
         Handle.AddItem(new NSMenuItem("Quit", Quit));
 
         observer.Subscribe(static i => i.IsRunning)
@@ -22,6 +31,10 @@ public sealed class StatusBarMenu : IDisposable
         
         observer.Subscribe(static i => i.Containers)
             .Handle(DisplayContainers)
+            .Decorate(Handle.InvokeOnMainThread);
+        
+        observer.Subscribe(static i => i.IsLaunchedAtLogin)
+            .Bind(settingsItem, static i => i.State, static launchAtLogin => launchAtLogin ? NSCellStateValue.On : NSCellStateValue.Off)
             .Decorate(Handle.InvokeOnMainThread);
         
         observer.Backfill();
