@@ -7,6 +7,15 @@ Nothing too fancy, really.
 
 You can click on a container to copy its name!
 
+## Installation
+
+Either download the latest [GitHub Release](https://github.com/phkiener/ColimaStatusBar/releases/)
+and extract the `.app` bundle yourself or use homebrew:
+
+```sh
+brew install phkiener/personal/colima-status-bar
+```
+
 ## Configuration
 
 By default, the status bar assumes you're running a standard colima configuration,
