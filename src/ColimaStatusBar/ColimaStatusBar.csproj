@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0-macos</TargetFramework>
     <AssemblyVersion>2.1.0</AssemblyVersion>
-    <DistributePath Condition="$(DistributePath) == ''">$(MSBuildThisFileDirectory)../../dist/</DistributePath>
+    <PublishAsZip>true</PublishAsZip>
   </PropertyGroup>
   
   <ItemGroup>
@@ -14,22 +14,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Reactive\Reactive.csproj" />
   </ItemGroup>
-  
-  <Target Name="distribute" DependsOnTargets="build">
-    <MakeDir Directories="$(DistributePath)" /> 
-    <ZipDirectory DestinationFile="$(DistributePath)$(AssemblyName)-$(AssemblyVersion).zip"
-                  SourceDirectory="$(TargetDir)/$(AssemblyName).app"
-                  Overwrite="true" />
-    
-    <ItemGroup>
-      <FilesToHash Include="$(DistributePath)$(AssemblyName)-$(AssemblyVersion).zip" />
-    </ItemGroup>
-    
-    <GetFileHash Files="@(FilesToHash)" Algorithm="SHA256" HashEncoding="hex">
-      <Output TaskParameter="Hash" ItemName="FileHash" />
-    </GetFileHash>
-    
-    <WriteLinesToFile File="$(DistributePath)$(AssemblyName)-$(AssemblyVersion).zip.checksum" Lines="@(FileHash)" Overwrite="true" />
-  </Target>
 
 </Project>

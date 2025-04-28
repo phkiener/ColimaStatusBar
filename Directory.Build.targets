@@ -1,0 +1,27 @@
+<Project>
+  <PropertyGroup Label="Enable/disable publishing as .zip">
+    <PublishAsZip Condition="$(PublishAsZip) == ''">false</PublishAsZip>
+    <CreatePackage Condition="$(PublishAsZip) == 'true'">false</CreatePackage>
+  </PropertyGroup>
+  
+  <PropertyGroup Label="Configure .zip publish">
+    <IncludeVersionInZipOutput Condition="$(IncludeVersionInZipOutput) == ''">true</IncludeVersionInZipOutput>
+    <_ZipOutputPath Condition="$(IncludeVersionInZipOutput) == 'true'">$(PublishDir)/$(AssemblyName)-$(AssemblyVersion).zip</_ZipOutputPath>
+    <_ZipOutputPath Condition="$(IncludeVersionInZipOutput) == 'false'">$(PublishDir)/$(AssemblyName).zip</_ZipOutputPath>
+    <_ChecksumOutputPath Condition="$(_ChecksumOutputPath) == ''">$(_ZipOutputPath)-CHECKSUM</_ChecksumOutputPath>
+  </PropertyGroup>
+  
+  <Target Name="_BundleApp" DependsOnTargets="_PrePublish" AfterTargets="Build;BeforePublish" BeforeTargets="AfterPublish" Condition="$(PublishAsZip) == 'true'">
+    <ZipDirectory DestinationFile="$(_ZipOutputPath)" SourceDirectory="$(TargetDir)/$(AssemblyName).app" Overwrite="true" />
+    <Message Importance="high" Text="Published app to $(_ZipOutputPath)" />
+  </Target>
+  
+  <Target Name="_GenerateChecksum" DependsOnTargets="_BundleApp" AfterTargets="Build;BeforePublish" BeforeTargets="AfterPublish" Condition="$(PublishAsZip) == 'true'">
+    <GetFileHash Files="$(_ZipOutputPath)" Algorithm="SHA256" HashEncoding="hex">
+      <Output TaskParameter="Hash" ItemName="FileHash" />
+    </GetFileHash>
+
+    <WriteLinesToFile File="$(_ChecksumOutputPath)" Lines="@(FileHash)" Overwrite="true" />
+    <Message Importance="high" Text="SHA256 checksum written to $(_ChecksumOutputPath)" />
+  </Target>
+</Project>
