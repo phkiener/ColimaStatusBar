@@ -1,34 +1,43 @@
-using Reactive;
-using Reactive.Extensions;
-
+using ColimaStatusBar.Core;
+using ColimaStatusBar.Framework.Flux;
 namespace ColimaStatusBar.StatusBar;
 
 public sealed class StatusBarIcon : IDisposable
 {
-    private readonly Reactive.IObserver<ColimaInteractor> observer;
+    private readonly Emitter emitter;
+    private readonly ColimaStatusStore colimaStatus;
 
-    public StatusBarIcon(NSStatusBar statusBar, ColimaInteractor interactor)
+    public StatusBarIcon(NSStatusBar statusBar, Emitter emitter, ColimaStatusStore colimaStatus)
     {
+        this.emitter = emitter;
+        this.colimaStatus = colimaStatus;
+        
         Handle = statusBar.CreateStatusItem(NSStatusItemLength.Square);
-        observer = Observer.Create(interactor);
+        SetStatusImage();
 
-        observer.Subscribe(i => i.IsRunning)
-            .Bind(Handle.Button, static btn => btn.Image, GetStatusImage)
-            .Decorate(Handle.InvokeOnMainThread);
+        emitter.OnEmit += HandleNotification;
+    }
 
-        observer.Backfill();
+    private void HandleNotification(object? sender, INotification notification)
+    {
+        if (notification is ColimaStatusChanged)
+        {
+            Handle.InvokeOnMainThread(SetStatusImage);
+        }
     }
 
     public NSStatusItem Handle { get; }
 
-    private static NSImage? GetStatusImage(bool isRunning)
+    private void SetStatusImage()
     {
-        return isRunning ? NSImage.GetSystemSymbol("shippingbox.fill", null) : NSImage.GetSystemSymbol("shippingbox", null);
+        Handle.Button.Image = colimaStatus.CurrentStatus is ColimaStatus.Running
+            ? NSImage.GetSystemSymbol("shippingbox.fill", null)
+            : NSImage.GetSystemSymbol("shippingbox", null);
     }
 
     public void Dispose()
     {
+        emitter.OnEmit -= HandleNotification;
         Handle.Dispose();
-        observer.Dispose();
     }
 }

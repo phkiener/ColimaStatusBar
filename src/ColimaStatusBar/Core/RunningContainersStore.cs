@@ -8,7 +8,7 @@ public sealed record RunningContainer(string Id, string Name, string Image, Cont
 
 public sealed record RunningContainersChanged : INotification;
 
-public sealed class RunningContainersStore : IStore, IDisposable, IAsyncDisposable
+public sealed class RunningContainersStore : IStore, IAsyncDisposable
 {
     private readonly Emitter emitter;
     private readonly List<RunningContainer> runningContainers = [];
@@ -34,21 +34,19 @@ public sealed class RunningContainersStore : IStore, IDisposable, IAsyncDisposab
         }
     }
 
-    Task IStore.Handle(ICommand command)
+    async Task IStore.Handle(ICommand command)
     {
         if (command is Commands.Initialize)
         {
             pollingTask = FetchRunningContainersAsync();
-            return Task.CompletedTask;
+            return;
         }
 
         if (command is Commands.Shutdown)
         {
-            pollingCancelled.Cancel();
-            return Task.CompletedTask;
+            await pollingCancelled.CancelAsync();
+            return;
         }
-
-        return Task.CompletedTask;
     }
 
     private async Task FetchRunningContainersAsync()
@@ -107,21 +105,16 @@ public sealed class RunningContainersStore : IStore, IDisposable, IAsyncDisposab
         }
     }
 
-    public void Dispose()
-    {
-        emitter.OnEmit -= ObserveSocketChange;
-
-        pollingCancelled.Cancel();
-        pollingCancelled.Dispose();
-    }
-
     public async ValueTask DisposeAsync()
     {
         emitter.OnEmit -= ObserveSocketChange;
 
-        await pollingCancelled.CancelAsync();
-        await pollingTask;
+        if (isPolling)
+        {
+            await pollingCancelled.CancelAsync();
+            await pollingTask;
 
-        pollingCancelled.Dispose();
+            pollingCancelled.Dispose();
+        }
     }
 }

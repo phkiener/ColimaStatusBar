@@ -13,7 +13,7 @@ public sealed record ColimaProfileChanged : INotification;
 
 internal sealed record SocketChanged(string? SocketAddress) : INotification;
 
-public sealed class ColimaStatusStore(Emitter emitter) : IStore, IDisposable, IAsyncDisposable
+public sealed class ColimaStatusStore(Emitter emitter) : IStore, IAsyncDisposable
 {
     private readonly CancellationTokenSource pollingCancelled = new();
     private Task pollingTask = Task.CompletedTask;
@@ -21,19 +21,19 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IDisposable, IA
     
     public ColimaStatus CurrentStatus { get; private set; } = ColimaStatus.Stopped;
     public RunningProfile? CurrentProfile { get; private set; }
-    
-    Task IStore.Handle(ICommand command)
+
+    async Task IStore.Handle(ICommand command)
     {
         if (command is Commands.Initialize)
         {
             pollingTask = FetchColimaStatusAsync();
-            return Task.CompletedTask;
+            return;
         }
 
         if (command is Commands.Shutdown)
         {
-            pollingCancelled.Cancel();
-            return Task.CompletedTask;
+            await pollingCancelled.CancelAsync();
+            return;
         }
 
         if (command is Commands.StartColima && CurrentStatus is not (ColimaStatus.Running or ColimaStatus.Starting))
@@ -42,7 +42,7 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IDisposable, IA
             emitter.Emit<ColimaStatusChanged>();
 
             _ = ProcessRunner.RunProcessAsync("/opt/homebrew/bin/colima", ["start"], pollingCancelled.Token);
-            return Task.CompletedTask;
+            return;
         }
 
         if (command is Commands.StopColima && CurrentStatus is not (ColimaStatus.Stopped or ColimaStatus.Stopping))
@@ -51,10 +51,8 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IDisposable, IA
             emitter.Emit<ColimaStatusChanged>();
 
             _ = ProcessRunner.RunProcessAsync("/opt/homebrew/bin/colima", ["stop"], pollingCancelled.Token);
-            return Task.CompletedTask;
+            return;
         }
-
-        return Task.CompletedTask;
     }
 
     private async Task FetchColimaStatusAsync()
@@ -92,17 +90,14 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IDisposable, IA
         }
     }
 
-    public void Dispose()
-    {
-        pollingCancelled.Cancel();
-        pollingCancelled.Dispose();
-    }
-
     public async ValueTask DisposeAsync()
     {
-        await pollingCancelled.CancelAsync();
-        await pollingTask;
+        if (isPolling)
+        {
+            await pollingCancelled.CancelAsync();
+            await pollingTask;
 
-        pollingCancelled.Dispose();
+            pollingCancelled.Dispose();
+        }
     }
 }

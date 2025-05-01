@@ -8,16 +8,15 @@ var serviceProvider = new ServiceCollection()
     .AddFramework()
     .AddStore<ColimaStatusStore>()
     .AddStore<RunningContainersStore>()
+    .AddStore<SettingsStore>()
     .BuildServiceProvider();
 
 await using var scope = serviceProvider.CreateAsyncScope();
 var dispatcher = scope.ServiceProvider.GetRequiredService<Dispatcher>();
 await dispatcher.Invoke<Commands.Initialize>();
 
-using var colimaInteractor = new ColimaInteractor(TimeSpan.FromSeconds(5));
-
 NSApplication.Init();
-NSApplication.SharedApplication.Delegate = new AppDelegate(colimaInteractor);
+NSApplication.SharedApplication.Delegate = new AppDelegate(scope.ServiceProvider);
 NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Accessory;
 NSApplication.SharedApplication.Run();
 

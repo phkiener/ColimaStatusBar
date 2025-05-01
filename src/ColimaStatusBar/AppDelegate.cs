@@ -1,16 +1,17 @@
 using ColimaStatusBar.StatusBar;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ColimaStatusBar;
 
-public sealed class AppDelegate(ColimaInteractor colimaInteractor) : NSApplicationDelegate
+public sealed class AppDelegate(IServiceProvider serviceProvider) : NSApplicationDelegate
 {
     private StatusBarIcon? statusBarIcon;
     private StatusBarMenu? statusBarMenu;
 
     public override void DidFinishLaunching(NSNotification notification)
     {
-        statusBarIcon = new StatusBarIcon(NSStatusBar.SystemStatusBar, colimaInteractor);
-        statusBarMenu = new StatusBarMenu(colimaInteractor);
+        statusBarIcon = ActivatorUtilities.CreateInstance<StatusBarIcon>(serviceProvider, NSStatusBar.SystemStatusBar);
+        statusBarMenu = ActivatorUtilities.CreateInstance<StatusBarMenu>(serviceProvider);
         
         statusBarIcon.Handle.Menu = statusBarMenu.Handle;
     }
