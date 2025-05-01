@@ -11,6 +11,8 @@ public sealed record RunningProfile(string Name, string SocketAddress, int CpuCo
 public sealed record ColimaStatusChanged : INotification;
 public sealed record ColimaProfileChanged : INotification;
 
+internal sealed record SocketChanged(string? SocketAddress) : INotification;
+
 public sealed class ColimaStatusStore(Emitter emitter) : IStore, IDisposable, IAsyncDisposable
 {
     private readonly CancellationTokenSource pollingCancelled = new();
@@ -77,6 +79,8 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IDisposable, IA
                 {
                     CurrentProfile = runningProfile;
                     emitter.Emit<ColimaProfileChanged>();
+
+                    emitter.Emit(new SocketChanged(CurrentProfile?.SocketAddress));
                 }
 
                 await pollTimer.WaitForNextTickAsync(pollingCancelled.Token);

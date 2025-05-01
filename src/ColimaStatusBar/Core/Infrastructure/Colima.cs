@@ -37,7 +37,7 @@ public static class Colima
     {
         var (_, path) = await ProcessRunner.RunProcessAsync("/bin/sh", ["-c", "\"which colima\""], cancellationToken);
 
-        return path;
+        return path.Trim();
     }
 
     private sealed class StatusOutput
