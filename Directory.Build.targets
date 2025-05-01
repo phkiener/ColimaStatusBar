@@ -2,6 +2,7 @@
   <PropertyGroup Label="Enable/disable publishing as .zip">
     <PublishAsZip Condition="$(PublishAsZip) == ''">false</PublishAsZip>
     <CreatePackage Condition="$(PublishAsZip) == 'true'">false</CreatePackage>
+    <PublishBuildDependsOn Condition="$(PublishAsZip) == 'true'">_BundleApp;_BundleApp;$(PublishBuildDependsOn)</PublishBuildDependsOn>
   </PropertyGroup>
   
   <PropertyGroup Label="Configure .zip publish">
@@ -11,12 +12,12 @@
     <_ChecksumOutputPath Condition="$(_ChecksumOutputPath) == ''">$(_ZipOutputPath)-CHECKSUM</_ChecksumOutputPath>
   </PropertyGroup>
   
-  <Target Name="_BundleApp" DependsOnTargets="_PrePublish" AfterTargets="Build;BeforePublish" BeforeTargets="AfterPublish" Condition="$(PublishAsZip) == 'true'">
+  <Target Name="_CompressAppBundle" DependsOnTargets="Build;PrepareForPublish" BeforeTargets="Publish" Condition="$(PublishAsZip) == 'true'">
     <ZipDirectory DestinationFile="$(_ZipOutputPath)" SourceDirectory="$(TargetDir)/$(AssemblyName).app" Overwrite="true" />
     <Message Importance="high" Text="Published app to $(_ZipOutputPath)" />
   </Target>
   
-  <Target Name="_GenerateChecksum" DependsOnTargets="_BundleApp" AfterTargets="Build;BeforePublish" BeforeTargets="AfterPublish" Condition="$(PublishAsZip) == 'true'">
+  <Target Name="_GenerateChecksum" DependsOnTargets="_CompressAppBundle" BeforeTargets="Publish" Condition="$(PublishAsZip) == 'true'">
     <GetFileHash Files="$(_ZipOutputPath)" Algorithm="SHA256" HashEncoding="hex">
       <Output TaskParameter="Hash" ItemName="FileHash" />
     </GetFileHash>
