@@ -34,19 +34,21 @@ public sealed class RunningContainersStore : IStore, IAsyncDisposable
         }
     }
 
-    async Task IStore.Handle(ICommand command)
+    Task IStore.Handle(ICommand command)
     {
         if (command is Commands.Initialize)
         {
             pollingTask = FetchRunningContainersAsync();
-            return;
+            return Task.CompletedTask;
         }
 
         if (command is Commands.Shutdown)
         {
-            await pollingCancelled.CancelAsync();
-            return;
+            _ = pollingCancelled.CancelAsync();
+            return Task.CompletedTask;
         }
+
+        return Task.CompletedTask;
     }
 
     private async Task FetchRunningContainersAsync()

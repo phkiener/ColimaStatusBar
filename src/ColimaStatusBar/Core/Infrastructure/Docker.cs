@@ -27,7 +27,9 @@ public static class Docker
         await socket.ConnectAsync(unixDomainSocketEndPoint, cancellationToken);
         
         var request = Encoding.UTF8.GetBytes($"GET {requestPath} HTTP/1.1\r\nHost: 127.0.0.1\r\nAccept: application/json\r\n\r\n");
-        await socket.SendAsync(request, cancellationToken);var receiveBuffer = new byte[1024];
+        await socket.SendAsync(request, cancellationToken);
+        
+        var receiveBuffer = new byte[1024];
         while (socket.Connected && !cancellationToken.IsCancellationRequested)
         {
             var bytesRead = await socket.ReceiveAsync(receiveBuffer, cancellationToken);

@@ -6,6 +6,7 @@ public sealed class Emitter
 {
     public void Emit(INotification notification)
     {
+        Console.WriteLine($"Emitting {notification.GetType().Name}");
         OnEmit?.Invoke(this, notification);
     }
     
