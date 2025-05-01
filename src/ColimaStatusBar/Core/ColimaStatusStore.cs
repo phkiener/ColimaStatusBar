@@ -1,3 +1,4 @@
+using ColimaStatusBar.Core.Infrastructure;
 using ColimaStatusBar.Framework;
 using ColimaStatusBar.Framework.Flux;
 
@@ -5,7 +6,10 @@ namespace ColimaStatusBar.Core;
 
 public enum ColimaStatus { Stopped, Starting, Running, Stopping }
 
+public sealed record RunningProfile(string Name, string SocketAddress, int CpuCores, long MemoryBytes, long DiskBytes);
+
 public sealed record ColimaStatusChanged : INotification;
+public sealed record ColimaProfileChanged : INotification;
 
 public sealed class ColimaStatusStore(Emitter emitter) : IStore, IDisposable, IAsyncDisposable
 {
@@ -14,6 +18,7 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IDisposable, IA
     private bool isPolling => !pollingCancelled.IsCancellationRequested;
     
     public ColimaStatus CurrentStatus { get; private set; } = ColimaStatus.Stopped;
+    public RunningProfile? CurrentProfile { get; private set; }
     
     Task IStore.Handle(ICommand command)
     {
@@ -59,13 +64,19 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IDisposable, IA
         {
             try
             {
-                var(exitCode, output) = await ProcessRunner.RunProcessAsync("/opt/homebrew/bin/colima", ["status", "--json"], pollingCancelled.Token);
-                var fetchedStatus = exitCode is 1 ? ColimaStatus.Stopped : ColimaStatus.Running;
+                var runningProfile = await Colima.StatusAsync(pollingCancelled.Token);
+                var fetchedStatus = runningProfile is null ? ColimaStatus.Stopped : ColimaStatus.Running;
 
                 if (CurrentStatus != fetchedStatus)
                 {
                     CurrentStatus = fetchedStatus;
                     emitter.Emit<ColimaStatusChanged>();
+                }
+
+                if (CurrentProfile != runningProfile)
+                {
+                    CurrentProfile = runningProfile;
+                    emitter.Emit<ColimaProfileChanged>();
                 }
 
                 await pollTimer.WaitForNextTickAsync(pollingCancelled.Token);
