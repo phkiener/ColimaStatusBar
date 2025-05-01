@@ -94,7 +94,7 @@ public sealed class ColimaInteractor : INotifyPropertyChanged, IDisposable
 
         if (Environment.GetEnvironmentVariable("COLIMA_HOME") is { } colimaHome)
         {
-            return $"{colimaHome}/defaul/docker.sock";
+            return $"{colimaHome}/default/docker.sock";
         }
         
         return $"unix://{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}/.colima/default/docker.sock";
