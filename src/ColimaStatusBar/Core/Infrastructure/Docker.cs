@@ -9,8 +9,7 @@ public static class Docker
 {
     public static async Task<IReadOnlyList<RunningContainer>> StatusAsync(string socketAddress, CancellationToken cancellationToken)
     {
-        var uri = new Uri(socketAddress);
-        var response = await SendRequestAsync(uri, "/containers/json?all=true", cancellationToken);
+        var response = await SendRequestAsync(socketAddress, "GET", "/containers/json?all=true", cancellationToken);
 
         var containers = JsonSerializer.Deserialize<ContainerOutput[]>(response) ?? [];
         return containers.Select(
@@ -18,15 +17,31 @@ public static class Docker
             .ToArray();
     }
 
-    private static async Task<string> SendRequestAsync(Uri socketAddress, string requestPath, CancellationToken cancellationToken)
+    public static async Task StartAsync(string socketAddress, string id, CancellationToken cancellationToken)
     {
+        await SendRequestAsync(socketAddress, "POST", $"/containers/{id}/start", cancellationToken);
+    }
+
+    public static async Task StopAsync(string socketAddress, string id, CancellationToken cancellationToken)
+    {
+        await SendRequestAsync(socketAddress, "POST", $"/containers/{id}/stop", cancellationToken);
+    }
+
+    public static async Task RemoveAsync(string socketAddress, string id, CancellationToken cancellationToken)
+    {
+        await SendRequestAsync(socketAddress, "DELETE", $"/containers/{id}", cancellationToken);
+    }
+
+    private static async Task<string> SendRequestAsync(string socketAddress, string method, string requestPath, CancellationToken cancellationToken)
+    {
+        var typedSocketAddress = new Uri(socketAddress);
         using var memoryStream = new MemoryStream();
         using var socket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
         
-        var unixDomainSocketEndPoint = new UnixDomainSocketEndPoint(socketAddress.AbsolutePath);
+        var unixDomainSocketEndPoint = new UnixDomainSocketEndPoint(typedSocketAddress.AbsolutePath);
         await socket.ConnectAsync(unixDomainSocketEndPoint, cancellationToken);
         
-        var request = Encoding.UTF8.GetBytes($"GET {requestPath} HTTP/1.1\r\nHost: 127.0.0.1\r\nAccept: application/json\r\n\r\n");
+        var request = Encoding.UTF8.GetBytes($"{method} {requestPath} HTTP/1.1\r\nHost: 127.0.0.1\r\nAccept: application/json\r\n\r\n");
         await socket.SendAsync(request, cancellationToken);
         
         var receiveBuffer = new byte[1024];
@@ -44,7 +59,7 @@ public static class Docker
         await socket.DisconnectAsync(true, cancellationToken);
         var responseText = Encoding.UTF8.GetString(memoryStream.ToArray());
 
-        if (!responseText.StartsWith("HTTP/1.1 200 OK"))
+        if (!responseText.StartsWith("HTTP/1.1 2"))
         {
             throw new InvalidOperationException($"Socket returned some bad stuff: {responseText}");
         }

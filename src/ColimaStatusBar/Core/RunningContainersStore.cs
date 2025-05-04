@@ -4,7 +4,14 @@ namespace ColimaStatusBar.Core;
 
 public enum ContainerState { Created, Running, Paused, Stopped, Restarting, Exited, Removing, Dead }
 
-public sealed record RunningContainer(string Id, string Name, string Image, ContainerState State);
+public sealed record RunningContainer(string Id, string Name, string Image, ContainerState State)
+{
+    public bool CanStart => State is ContainerState.Created or ContainerState.Stopped or ContainerState.Exited;
+    
+    public bool CanStop => State is ContainerState.Running or ContainerState.Restarting;
+    
+    public bool CanRemove => State is ContainerState.Created or ContainerState.Stopped or ContainerState.Exited;
+}
 
 public sealed record RunningContainersChanged : INotification;
 
@@ -34,21 +41,37 @@ public sealed class RunningContainersStore : IStore, IAsyncDisposable
         }
     }
 
-    Task IStore.Handle(ICommand command)
+    async Task IStore.Handle(ICommand command)
     {
         if (command is Commands.Initialize)
         {
             pollingTask = FetchRunningContainersAsync();
-            return Task.CompletedTask;
+            return;
+        }
+
+        if (command is Commands.StartContainer startContainer && currentSocket is not null)
+        {
+            await Infrastructure.Docker.StartAsync(currentSocket, startContainer.Id, pollingCancelled.Token);
+            return;
+        }
+
+        if (command is Commands.StopContainer stopContainer && currentSocket is not null)
+        {
+            await Infrastructure.Docker.StopAsync(currentSocket, stopContainer.Id, pollingCancelled.Token);
+            return;
+        }
+
+        if (command is Commands.RemoveContainer removeContainer && currentSocket is not null)
+        {
+            await Infrastructure.Docker.RemoveAsync(currentSocket, removeContainer.Id, pollingCancelled.Token);
+            return;
         }
 
         if (command is Commands.Shutdown)
         {
             _ = pollingCancelled.CancelAsync();
-            return Task.CompletedTask;
+            return;
         }
-
-        return Task.CompletedTask;
     }
 
     private async Task FetchRunningContainersAsync()

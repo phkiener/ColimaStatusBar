@@ -5,11 +5,13 @@ namespace ColimaStatusBar.StatusBar;
 
 public sealed class StatusBarMenu : IDisposable
 {
+    private readonly Dispatcher dispatcher;
     private readonly Emitter emitter;
     private readonly RunningContainersStore runningContainers;
 
     public StatusBarMenu(Dispatcher dispatcher, Emitter emitter, ColimaStatusStore colimaStatus, RunningContainersStore runningContainers, SettingsStore settingsStore)
     {
+        this.dispatcher = dispatcher;
         this.emitter = emitter;
         this.runningContainers = runningContainers;
         
@@ -55,7 +57,7 @@ public sealed class StatusBarMenu : IDisposable
 
         foreach (var container in runningContainers.RunningContainers.Reverse())
         {
-            Handle.InsertItem(new RunningContainerItem(container), index: 3);
+            Handle.InsertItem(new RunningContainerItem(dispatcher, container), index: 3);
         }
     }
 
