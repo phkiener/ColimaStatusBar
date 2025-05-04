@@ -33,7 +33,7 @@ public sealed class CurrentProfileItem : NSMenuItem
                 $"{AsGibibytes(profile.DiskBytes)} Disk",
             ];
 
-            Title = $"Profile '{profile.Name}': {string.Join(" | ", detailInfoParts)}";
+            Title = string.Join(" | ", detailInfoParts);
         }
         else
         {

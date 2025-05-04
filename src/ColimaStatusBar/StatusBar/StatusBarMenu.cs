@@ -20,6 +20,7 @@ public sealed class StatusBarMenu : IDisposable
         Handle.AddItem(new LaunchAtLoginItem(dispatcher, emitter, settingsStore));
         Handle.AddItem(new NSMenuItem(title: "Quit", Quit));
 
+        DisplayContainers();
         emitter.OnEmit += HandleNotification;
     }
 

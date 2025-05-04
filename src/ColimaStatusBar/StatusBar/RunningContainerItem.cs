@@ -15,13 +15,14 @@ public sealed class RunningContainerItem : NSMenuItem
 
     private void Draw()
     {
-        Title = $"{container.Name} {container.State}";
-        Menu = new NSMenu
+        Title = $"{container.Name}";
+        Submenu = new NSMenu
         {
             Items =
             [
-                new NSMenuItem($"Name: {container.Name}") { Enabled = false },
-                new NSMenuItem($"Image: {container.Image}") { Enabled = false }
+                new NSMenuItem($"Name: {container.Name}"),
+                new NSMenuItem($"Image: {container.Image}"),
+                new NSMenuItem($"Status: {container.State}")
             ]
         };
     }
