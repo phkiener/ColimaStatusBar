@@ -80,7 +80,7 @@ public sealed class RunningContainersStore : IStore, IAsyncDisposable
                         {
                             var index = runningContainers.IndexOf(existingContainer);
                             runningContainers[index] = container;
-                            
+
                             containersChanged = true;
                         }
 
@@ -97,12 +97,14 @@ public sealed class RunningContainersStore : IStore, IAsyncDisposable
                         emitter.Emit<RunningContainersChanged>();
                     }
                 }
-
-                await pollTimer.WaitForNextTickAsync(pollingCancelled.Token);
             }
             catch
             {
                 // ignore
+            }
+            finally
+            {
+                await pollTimer.WaitForNextTickAsync(pollingCancelled.Token);
             }
         }
     }

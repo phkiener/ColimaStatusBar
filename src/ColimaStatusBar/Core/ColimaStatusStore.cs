@@ -86,12 +86,14 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IAsyncDisposabl
 
                     emitter.Emit(new SocketChanged(CurrentProfile?.SocketAddress));
                 }
-
-                await pollTimer.WaitForNextTickAsync(pollingCancelled.Token);
             }
             catch
             {
                 // ignore
+            }
+            finally
+            {
+                await pollTimer.WaitForNextTickAsync(pollingCancelled.Token);
             }
         }
     }
