@@ -5,43 +5,26 @@ namespace ColimaStatusBar.StatusBar;
 
 public sealed class StatusBarMenu : IDisposable
 {
-    private readonly Dispatcher dispatcher;
     private readonly Emitter emitter;
-    private readonly ColimaStatusStore colimaStatus;
     private readonly RunningContainersStore runningContainers;
-    private readonly SettingsStore settingsStore;
 
     public StatusBarMenu(Dispatcher dispatcher, Emitter emitter, ColimaStatusStore colimaStatus, RunningContainersStore runningContainers, SettingsStore settingsStore)
     {
-        this.dispatcher = dispatcher;
         this.emitter = emitter;
-        this.colimaStatus = colimaStatus;
         this.runningContainers = runningContainers;
-        this.settingsStore = settingsStore;
-
+        
         Handle = new NSMenu();
-        Handle.AddItem(new NSMenuItem(title: colimaStatus.CurrentStatus is ColimaStatus.Running ? "colima is running" : "colima is stopped"));
+        Handle.AddItem(new CurrentStatusItem(dispatcher, emitter, colimaStatus));
+        Handle.AddItem(new CurrentProfileItem(emitter, colimaStatus));
         Handle.AddItem(NSMenuItem.SeparatorItem);
-        // Running containers will be placed between those separators
-        Handle.AddItem(NSMenuItem.SeparatorItem);
-        Handle.AddItem(new NSMenuItem("Launch at login", ToggleLaunchAtLogin) { State = NSCellStateValue.Off });
-        Handle.AddItem(new NSMenuItem("Quit", Quit));
+        Handle.AddItem(new LaunchAtLoginItem(dispatcher, emitter, settingsStore));
+        Handle.AddItem(new NSMenuItem(title: "Quit", Quit));
 
         emitter.OnEmit += HandleNotification;
     }
 
     private void HandleNotification(object? sender, INotification notification)
     {
-        if (notification is ColimaStatusChanged)
-        {
-            Handle.InvokeOnMainThread(() => Handle.Items[0].Title = colimaStatus.CurrentStatus is ColimaStatus.Running ? "colima is running" : "colima is stopped");
-        }
-
-        if (notification is LaunchAtLoginChanged)
-        {
-            Handle.InvokeOnMainThread(() => Handle.Items[^2].State = settingsStore.StartAtLogin ? NSCellStateValue.On : NSCellStateValue.Off);
-        }
-
         if (notification is RunningContainersChanged)
         {
             Handle.InvokeOnMainThread(DisplayContainers);
@@ -52,21 +35,27 @@ public sealed class StatusBarMenu : IDisposable
 
     private void DisplayContainers()
     {
-        var currentContainers = Handle.Items.OfType<ContainerItem>().ToList();
+        var currentContainers = Handle.Items.OfType<RunningContainerItem>().ToList();
         foreach (var container in currentContainers)
         {
             Handle.RemoveItem(container);
         }
 
-        foreach (var container in runningContainers.RunningContainers)
+        var extraSeparator = Handle.Items.Where(static i => i.IsSeparatorItem).Skip(1).FirstOrDefault();
+        if (extraSeparator is not null)
         {
-            Handle.InsertItem(new ContainerItem(container), index: 2);
+            Handle.RemoveItem(extraSeparator);
         }
-    }
 
-    private void ToggleLaunchAtLogin(object? sender, EventArgs e)
-    {
-        _ = dispatcher.Invoke(new Commands.LaunchAtLogin(!settingsStore.StartAtLogin));
+        if (runningContainers.RunningContainers.Any())
+        {
+            Handle.InsertItem(NSMenuItem.SeparatorItem, index: 3);
+        }
+
+        foreach (var container in runningContainers.RunningContainers.Reverse())
+        {
+            Handle.InsertItem(new RunningContainerItem(container), index: 3);
+        }
     }
 
     private void Quit(object? sender, EventArgs e)
@@ -78,20 +67,5 @@ public sealed class StatusBarMenu : IDisposable
     {
         emitter.OnEmit -= HandleNotification;
         Handle.Dispose();
-    }
-
-    private sealed class ContainerItem : NSMenuItem
-    {
-        public ContainerItem(RunningContainer container) : base(title: $"{container.Name}: {container.Image}", (_, _) => CopyToClipboard(container.Name))
-        {
-            ToolTip = "Copy container name";
-            State = container.State is ContainerState.Running ? NSCellStateValue.On : NSCellStateValue.Off;
-        }
-    }
-
-    private static void CopyToClipboard(string text)
-    {
-        NSPasteboard.GeneralPasteboard.ClearContents();
-        NSPasteboard.GeneralPasteboard.SetDataForType(NSData.FromString(text), NSPasteboardType.String.GetConstant());
     }
 }

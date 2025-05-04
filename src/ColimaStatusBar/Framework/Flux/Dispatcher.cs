@@ -4,7 +4,6 @@ public sealed class Dispatcher(IEnumerable<IStore> stores)
 {
     public async Task Invoke(ICommand command)
     {
-        Console.WriteLine($"Dispatching {command.GetType().Name}");
         foreach (var store in stores)
         {
             try

@@ -18,22 +18,23 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IAsyncDisposabl
     private readonly CancellationTokenSource pollingCancelled = new();
     private Task pollingTask = Task.CompletedTask;
     private bool isPolling => !pollingCancelled.IsCancellationRequested;
+    private bool pausePolling = false;
     
     public ColimaStatus CurrentStatus { get; private set; } = ColimaStatus.Stopped;
     public RunningProfile? CurrentProfile { get; private set; }
 
-    Task IStore.Handle(ICommand command)
+    async Task IStore.Handle(ICommand command)
     {
         if (command is Commands.Initialize)
         {
             pollingTask = FetchColimaStatusAsync();
-            return Task.CompletedTask;
+            return;
         }
 
         if (command is Commands.Shutdown)
         {
             _ = pollingCancelled.CancelAsync();
-            return Task.CompletedTask;
+            return;
         }
 
         if (command is Commands.StartColima && CurrentStatus is not (ColimaStatus.Running or ColimaStatus.Starting))
@@ -41,8 +42,11 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IAsyncDisposabl
             CurrentStatus = ColimaStatus.Starting;
             emitter.Emit<ColimaStatusChanged>();
 
-            _ = ProcessRunner.RunProcessAsync("/opt/homebrew/bin/colima", ["start"], pollingCancelled.Token);
-            return Task.CompletedTask;
+            pausePolling = true;
+            _ = await ProcessRunner.RunProcessAsync("/opt/homebrew/bin/colima", ["start"], pollingCancelled.Token);
+            pausePolling = false;
+            
+            return;
         }
 
         if (command is Commands.StopColima && CurrentStatus is not (ColimaStatus.Stopped or ColimaStatus.Stopping))
@@ -50,11 +54,11 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IAsyncDisposabl
             CurrentStatus = ColimaStatus.Stopping;
             emitter.Emit<ColimaStatusChanged>();
 
-            _ = ProcessRunner.RunProcessAsync("/opt/homebrew/bin/colima", ["stop"], pollingCancelled.Token);
-            return Task.CompletedTask;
+            pausePolling = true;
+            _ = await ProcessRunner.RunProcessAsync("/opt/homebrew/bin/colima", ["stop"], pollingCancelled.Token);
+            pausePolling = false;
+            return;
         }
-
-        return Task.CompletedTask;
     }
 
     private async Task FetchColimaStatusAsync()
@@ -69,13 +73,13 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IAsyncDisposabl
                 var runningProfile = await Colima.StatusAsync(pollingCancelled.Token);
                 var fetchedStatus = runningProfile is null ? ColimaStatus.Stopped : ColimaStatus.Running;
 
-                if (CurrentStatus != fetchedStatus)
+                if (CurrentStatus != fetchedStatus && !pausePolling)
                 {
                     CurrentStatus = fetchedStatus;
                     emitter.Emit<ColimaStatusChanged>();
                 }
 
-                if (CurrentProfile != runningProfile)
+                if (CurrentProfile != runningProfile && !pausePolling)
                 {
                     CurrentProfile = runningProfile;
                     emitter.Emit<ColimaProfileChanged>();
