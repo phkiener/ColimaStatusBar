@@ -6,12 +6,14 @@ public sealed record ProcessResult(int ExitCode, string Output);
 
 public static class ProcessRunner
 {
-    public static async Task<ProcessResult> RunProcessAsync(string executable, string[] args, CancellationToken cancellationToken)
+    private static readonly string Shell =  Environment.GetEnvironmentVariable("SHELL") ?? "/bin/zsh";
+    
+    public static async Task<ProcessResult> RunAsShell(string executable, string[] args, CancellationToken cancellationToken)
     {
         var processInfo = new ProcessStartInfo
         {
-            FileName = executable,
-            Arguments = string.Join(" ", args),
+            FileName = Shell,
+            Arguments = $"-r --login -c \"{executable} {string.Join(" ", args)}\"",
             UseShellExecute = false,
             CreateNoWindow = true,
             RedirectStandardOutput = true,

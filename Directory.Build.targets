@@ -18,8 +18,8 @@
       <_AppBundleFiles Include="$(TargetDir)$(AssemblyName).app/**/*" />
     </ItemGroup>
     <Copy SourceFiles="@(_AppBundleFiles)" DestinationFolder="$(_BundleOutputPath)/$(AssemblyName).app/%(RecursiveDir)" />
-
     <ZipDirectory DestinationFile="$(_ZipOutputPath)" SourceDirectory="$(_BundleOutputPath)" Overwrite="true" />
+    <RemoveDir Directories="$(_BundleOutputPath)" ContinueOnError="true" />
     <Message Importance="high" Text="Published app to $(_ZipOutputPath)" />
   </Target>
   

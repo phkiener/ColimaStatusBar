@@ -1,5 +1,4 @@
 using ColimaStatusBar.Core.Infrastructure;
-using ColimaStatusBar.Framework;
 using ColimaStatusBar.Framework.Flux;
 
 namespace ColimaStatusBar.Core;
@@ -43,7 +42,7 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IAsyncDisposabl
             emitter.Emit<ColimaStatusChanged>();
 
             pausePolling = true;
-            _ = await ProcessRunner.RunProcessAsync("/opt/homebrew/bin/colima", ["start"], pollingCancelled.Token);
+            await Colima.StartAsync(pollingCancelled.Token);
             pausePolling = false;
             
             return;
@@ -55,7 +54,7 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IAsyncDisposabl
             emitter.Emit<ColimaStatusChanged>();
 
             pausePolling = true;
-            _ = await ProcessRunner.RunProcessAsync("/opt/homebrew/bin/colima", ["stop"], pollingCancelled.Token);
+            await Colima.StopAsync(pollingCancelled.Token);
             pausePolling = false;
             return;
         }

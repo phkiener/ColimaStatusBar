@@ -6,13 +6,9 @@ namespace ColimaStatusBar.Core.Infrastructure;
 
 public static class Colima
 {
-    private static string? colimaPath = null;
-    
     public static async Task<RunningProfile?> StatusAsync(CancellationToken cancellationToken)
     {
-        colimaPath ??= await DetermineColimaPathAsync(cancellationToken);
-
-        var (exitCode, output) = await ProcessRunner.RunProcessAsync(colimaPath, ["status", "--json"], cancellationToken);
+        var (exitCode, output) = await ProcessRunner.RunAsShell("colima", ["status", "--json"], cancellationToken);
         if (exitCode is 1)
         {
             return null;
@@ -31,13 +27,15 @@ public static class Colima
             MemoryBytes: parsedOutput.Memory,
             DiskBytes: parsedOutput.Disk);
     }
-    
 
-    private static async Task<string> DetermineColimaPathAsync(CancellationToken cancellationToken)
+    public static async Task StartAsync(CancellationToken cancellationToken)
     {
-        var (_, path) = await ProcessRunner.RunProcessAsync("/bin/sh", ["-c", "\"which colima\""], cancellationToken);
+        _ = await ProcessRunner.RunAsShell("colima", ["start"], cancellationToken);
+    }
 
-        return path.Trim();
+    public static async Task StopAsync(CancellationToken cancellationToken)
+    {
+        _ = await ProcessRunner.RunAsShell("colima", ["stop"], cancellationToken);
     }
 
     private sealed class StatusOutput
