@@ -52,18 +52,24 @@ public sealed class RunningContainersStore : IStore, IAsyncDisposable
         if (command is Commands.StartContainer startContainer && currentSocket is not null)
         {
             await Infrastructure.Docker.StartAsync(currentSocket, startContainer.Id, pollingCancelled.Token);
+            await FetchStatusAsync();
+            
             return;
         }
 
         if (command is Commands.StopContainer stopContainer && currentSocket is not null)
         {
             await Infrastructure.Docker.StopAsync(currentSocket, stopContainer.Id, pollingCancelled.Token);
+            await FetchStatusAsync();
+            
             return;
         }
 
         if (command is Commands.RemoveContainer removeContainer && currentSocket is not null)
         {
             await Infrastructure.Docker.RemoveAsync(currentSocket, removeContainer.Id, pollingCancelled.Token);
+            await FetchStatusAsync();
+            
             return;
         }
 
@@ -79,58 +85,60 @@ public sealed class RunningContainersStore : IStore, IAsyncDisposable
         await Task.Yield(); // force a yield, the rest should happen on a background thread
 
         var pollTimer = new PeriodicTimer(TimeSpan.FromSeconds(5));
-        while (isPolling)
+        while (await pollTimer.WaitForNextTickAsync(pollingCancelled.Token))
         {
             try
             {
-                if (currentSocket is null)
-                {
-                    if (RunningContainers is not [])
-                    {
-                        runningContainers.Clear();
-                        emitter.Emit<RunningContainersChanged>();
-                    }
-                }
-                else
-                {
-                    var response = await Infrastructure.Docker.StatusAsync(currentSocket, pollingCancelled.Token);
-                    bool containersChanged = false;
-
-                    foreach (var container in response)
-                    {
-                        var existingContainer = runningContainers.FirstOrDefault(c => c.Id == container.Id);
-                        if (existingContainer is not null && existingContainer != container)
-                        {
-                            var index = runningContainers.IndexOf(existingContainer);
-                            runningContainers[index] = container;
-
-                            containersChanged = true;
-                        }
-
-                        if (existingContainer is null)
-                        {
-                            runningContainers.Add(container);
-                            containersChanged = true;
-                        }
-                    }
-
-                    var removedContainers = runningContainers.RemoveAll(c => response.All(r => c.Id != r.Id));
-                    if (containersChanged || removedContainers > 0)
-                    {
-                        emitter.Emit<RunningContainersChanged>();
-                    }
-                }
+                await FetchStatusAsync();
             }
             catch
             {
                 // ignore
             }
-            finally
+        }
+    }
+
+    private async Task FetchStatusAsync()
+    {
+        if (currentSocket is null)
+        {
+            if (RunningContainers is not [])
             {
-                await pollTimer.WaitForNextTickAsync(pollingCancelled.Token);
+                runningContainers.Clear();
+                emitter.Emit<RunningContainersChanged>();
+            }
+        }
+        else
+        {
+            var response = await Infrastructure.Docker.StatusAsync(currentSocket, pollingCancelled.Token);
+            bool containersChanged = false;
+
+            foreach (var container in response)
+            {
+                var existingContainer = runningContainers.FirstOrDefault(c => c.Id == container.Id);
+                if (existingContainer is not null && existingContainer != container)
+                {
+                    var index = runningContainers.IndexOf(existingContainer);
+                    runningContainers[index] = container;
+
+                    containersChanged = true;
+                }
+
+                if (existingContainer is null)
+                {
+                    runningContainers.Add(container);
+                    containersChanged = true;
+                }
+            }
+
+            var removedContainers = runningContainers.RemoveAll(c => response.All(r => c.Id != r.Id));
+            if (containersChanged || removedContainers > 0)
+            {
+                emitter.Emit<RunningContainersChanged>();
             }
         }
     }
+
 
     public async ValueTask DisposeAsync()
     {
