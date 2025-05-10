@@ -1,53 +1,47 @@
 using ColimaStatusBar.Core;
-using ColimaStatusBar.Framework.Flux;
 
 namespace ColimaStatusBar.StatusBar;
 
 public sealed class RunningContainerItem : NSMenuItem
 {
-    private readonly Dispatcher dispatcher;
-    private readonly RunningContainer container;
-
-    public RunningContainerItem(Dispatcher dispatcher, RunningContainer container)
+    public string ContainerId { get; }
+    
+    public RunningContainerItem(RunningContainer container)
     {
-        this.dispatcher = dispatcher;
-        this.container = container;
-
-        Draw();
-    }
-
-    private void Draw()
-    {
+        ContainerId = container.Id;
+        
         var menuItems = new List<NSMenuItem>
         {
-            new($"Name: {container.Name}", (_, _) => CopyToClipboard(container.Name)) { ToolTip = "Copy container name" },
+            new($"Name: {container.Name}"),
             new($"Image: {container.Image}"),
-            new($"Status: {container.State}")
+            new($"Status: {container.State}"),
+            SeparatorItem,
+            new("Copy container name", (_, _) => CopyToClipboard(container.Name))
         };
-
-        if (container.CanStart || container.CanStop || container.CanRemove)
-        {
-            menuItems.Add(SeparatorItem);
-        }
 
         if (container.CanStart)
         {
-            menuItems.Add(new NSMenuItem("Start", (_, _) => _ =dispatcher.Invoke(new Commands.StartContainer(container.Id))));
+            menuItems.Add(new NSMenuItem("Start", (_, _) => OnStart?.Invoke(this, EventArgs.Empty)));
         }
 
         if (container.CanStop)
         {
-            menuItems.Add(new NSMenuItem("Stop", (_, _) => _ =dispatcher.Invoke(new Commands.StopContainer(container.Id))));
+            menuItems.Add(new NSMenuItem("Stop", (_, _) => OnStop?.Invoke(this, EventArgs.Empty)));
         }
 
         if (container.CanRemove)
         {
-            menuItems.Add(new NSMenuItem("Remove", (_, _) => _ =dispatcher.Invoke(new Commands.RemoveContainer(container.Id))));
+            menuItems.Add(new NSMenuItem("Remove", (_, _) => OnRemove?.Invoke(this, EventArgs.Empty)));
         }
+        
 
         Title = $"{container.Name}";
         Submenu = new NSMenu { Items = menuItems.ToArray() };
     }
+
+    public event EventHandler? OnStart;
+    public event EventHandler? OnStop;
+    public event EventHandler? OnRemove;
 
     private static void CopyToClipboard(string text)
     {

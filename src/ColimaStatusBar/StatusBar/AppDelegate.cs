@@ -1,11 +1,10 @@
 using ColimaStatusBar.Core;
 using ColimaStatusBar.Framework.AppKit;
 using ColimaStatusBar.Framework.Flux;
-using ColimaStatusBar.StatusBar.V2;
 
-namespace ColimaStatusBar;
+namespace ColimaStatusBar.StatusBar;
 
-public sealed class MainDelegate(
+public sealed class AppDelegate(
     ColimaStatusStore store,
     CurrentProfileControl currentProfileControl,
     RunningContainersControl runningContainersControl,

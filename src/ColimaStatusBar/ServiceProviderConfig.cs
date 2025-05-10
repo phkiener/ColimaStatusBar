@@ -1,7 +1,7 @@
 using ColimaStatusBar.Core;
 using ColimaStatusBar.Framework;
 using ColimaStatusBar.Framework.Flux;
-using ColimaStatusBar.StatusBar.V2;
+using ColimaStatusBar.StatusBar;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ColimaStatusBar;

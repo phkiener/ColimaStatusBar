@@ -2,7 +2,7 @@ using ColimaStatusBar.Core;
 using ColimaStatusBar.Framework.AppKit;
 using ColimaStatusBar.Framework.Flux;
 
-namespace ColimaStatusBar.StatusBar.V2;
+namespace ColimaStatusBar.StatusBar;
 
 public sealed class CurrentProfileControl(ColimaStatusStore store, Dispatcher dispatcher, Binder binder) : Control<NSMenu>(dispatcher, binder)
 {
