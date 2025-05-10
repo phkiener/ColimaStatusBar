@@ -14,6 +14,7 @@ public static class ServiceProviderConfiguration
     public static IServiceCollection AddFramework(this IServiceCollection services)
     {
         return services.AddScoped<Dispatcher>()
-            .AddScoped<Emitter>();
+            .AddScoped<Emitter>()
+            .AddTransient<Binder>();
     }
 }

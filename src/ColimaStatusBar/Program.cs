@@ -1,23 +1,13 @@
 ﻿using ColimaStatusBar;
 using ColimaStatusBar.Core;
-using ColimaStatusBar.Framework;
-using ColimaStatusBar.Framework.Flux;
 using Microsoft.Extensions.DependencyInjection;
 
-var serviceProvider = new ServiceCollection()
-    .AddFramework()
-    .AddStore<ColimaStatusStore>()
-    .AddStore<RunningContainersStore>()
-    .AddStore<SettingsStore>()
-    .BuildServiceProvider();
-
-await using var scope = serviceProvider.CreateAsyncScope();
-var dispatcher = scope.ServiceProvider.GetRequiredService<Dispatcher>();
-await dispatcher.Invoke<Commands.Initialize>();
+await using var scope = ServiceProviderConfig.BuildServiceScope();
+await scope.Dispatch<Commands.Initialize>();
 
 NSApplication.Init();
-NSApplication.SharedApplication.Delegate = new AppDelegate(scope.ServiceProvider);
+NSApplication.SharedApplication.Delegate = scope.ServiceProvider.GetRequiredService<MainDelegate>();
 NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Accessory;
 NSApplication.SharedApplication.Run();
 
-await dispatcher.Invoke<Commands.Shutdown>();
+await scope.Dispatch<Commands.Shutdown>();

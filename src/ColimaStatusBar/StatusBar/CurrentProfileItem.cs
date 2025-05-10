@@ -22,7 +22,7 @@ public sealed class CurrentProfileItem : NSMenuItem
     private void Draw()
     {
         Enabled = false;
-        Hidden = colimaStatus.CurrentProfile is null;
+        //Hidden = colimaStatus.CurrentProfile is null;
 
         if (colimaStatus.CurrentProfile is not null and var profile)
         {
@@ -33,11 +33,11 @@ public sealed class CurrentProfileItem : NSMenuItem
                 $"{AsGibibytes(profile.DiskBytes)} Disk",
             ];
 
-            Title = string.Join(" | ", detailInfoParts);
+            Title = string.Join(" | ", detailInfoParts) + "\nAnother line?";
         }
         else
         {
-            Title = "No profile running";
+            Title = "No profile running\nAnother line?";
         }
     }
 
