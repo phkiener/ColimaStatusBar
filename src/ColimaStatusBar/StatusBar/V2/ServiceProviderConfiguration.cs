@@ -8,6 +8,7 @@ public static class ServiceProviderConfiguration
     {
         return services.AddScoped<MainDelegate>()
             .AddScoped<CurrentProfileControl>()
+            .AddScoped<RunningContainersControl>()
             .AddScoped<SettingsControl>();
     }
 }

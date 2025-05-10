@@ -8,6 +8,7 @@ namespace ColimaStatusBar;
 public sealed class MainDelegate(
     ColimaStatusStore store,
     CurrentProfileControl currentProfileControl,
+    RunningContainersControl runningContainersControl,
     SettingsControl settingsControl,
     Binder binder) : NSApplicationDelegate
 {
@@ -19,6 +20,8 @@ public sealed class MainDelegate(
         statusItem.Menu = new NSMenu();
 
         currentProfileControl.Attach(statusItem.Menu);
+        statusItem.Menu.AddItem(NSMenuItem.SeparatorItem);
+        runningContainersControl.Attach(statusItem.Menu);
         statusItem.Menu.AddItem(NSMenuItem.SeparatorItem);
         settingsControl.Attach(statusItem.Menu);
 
@@ -40,6 +43,7 @@ public sealed class MainDelegate(
         {
             binder.Dispose();
             currentProfileControl.Dispose();
+            runningContainersControl.Dispose();
             settingsControl.Dispose();
 
             statusItem.Menu.Dispose();
