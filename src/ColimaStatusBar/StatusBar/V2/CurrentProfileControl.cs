@@ -4,7 +4,7 @@ using ColimaStatusBar.Framework.Flux;
 
 namespace ColimaStatusBar.StatusBar.V2;
 
-public sealed class CurrentProfile(ColimaStatusStore store, Dispatcher dispatcher, Binder binder) : Control<NSMenu>(dispatcher, binder)
+public sealed class CurrentProfileControl(ColimaStatusStore store, Dispatcher dispatcher, Binder binder) : Control<NSMenu>(dispatcher, binder)
 {
     private const long gibibytesFactor = 1073741824;
 

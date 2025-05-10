@@ -5,7 +5,11 @@ using ColimaStatusBar.StatusBar.V2;
 
 namespace ColimaStatusBar;
 
-public sealed class MainDelegate(ColimaStatusStore store, CurrentProfile currentProfile, Binder binder) : NSApplicationDelegate
+public sealed class MainDelegate(
+    ColimaStatusStore store,
+    CurrentProfileControl currentProfileControl,
+    SettingsControl settingsControl,
+    Binder binder) : NSApplicationDelegate
 {
     private NSStatusItem? statusItem;
     
@@ -14,8 +18,11 @@ public sealed class MainDelegate(ColimaStatusStore store, CurrentProfile current
         statusItem = NSStatusBar.SystemStatusBar.CreateStatusItem(NSStatusItemLength.Square);
         statusItem.Menu = new NSMenu();
 
+        currentProfileControl.Attach(statusItem.Menu);
+        statusItem.Menu.AddItem(NSMenuItem.SeparatorItem);
+        settingsControl.Attach(statusItem.Menu);
+
         binder.BindControl(statusItem).To<ColimaStatusChanged>(SetStatusImage);
-        currentProfile.Attach(statusItem.Menu);
     }
 
     private void SetStatusImage(NSStatusItem item)
@@ -32,7 +39,8 @@ public sealed class MainDelegate(ColimaStatusStore store, CurrentProfile current
         if (disposing && statusItem?.Menu is not null)
         {
             binder.Dispose();
-            currentProfile.Dispose();
+            currentProfileControl.Dispose();
+            settingsControl.Dispose();
 
             statusItem.Menu.Dispose();
             statusItem.Dispose();
