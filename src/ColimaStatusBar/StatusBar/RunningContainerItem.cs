@@ -4,11 +4,13 @@ namespace ColimaStatusBar.StatusBar;
 
 public sealed class RunningContainerItem : NSMenuItem
 {
-    public string ContainerId { get; }
+    public string ContainerId => Container.Id;
+    
+    public RunningContainer Container { get; }
     
     public RunningContainerItem(RunningContainer container)
     {
-        ContainerId = container.Id;
+        Container = container;
         
         var menuItems = new List<NSMenuItem>
         {
@@ -42,7 +44,7 @@ public sealed class RunningContainerItem : NSMenuItem
     public event EventHandler? OnStart;
     public event EventHandler? OnStop;
     public event EventHandler? OnRemove;
-
+    
     private static void CopyToClipboard(string text)
     {
         NSPasteboard.GeneralPasteboard.ClearContents();

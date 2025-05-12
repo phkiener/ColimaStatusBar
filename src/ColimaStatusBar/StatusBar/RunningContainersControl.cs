@@ -17,22 +17,34 @@ public sealed class RunningContainersControl(RunningContainersStore store, Dispa
 
     private void UpdateContainers(NSMenu menu)
     {
-        var existingItems = menu.Items.OfType<RunningContainerItem>().ToList();
-        foreach (var item in existingItems)
+        var runningContainers = store.RunningContainers.OrderByDescending(static c => c.Name).ToList();
+        foreach (var container in runningContainers)
+        {
+            var existingItem = menu.Items.OfType<RunningContainerItem>().SingleOrDefault(i => i.ContainerId == container.Id);
+            if (existingItem is not null && existingItem.Container != container)
+            {
+                menu.RemoveItem(existingItem);
+                existingItem.Dispose();
+                existingItem = null;
+            }
+
+            if (existingItem is null)
+            {
+                var containerItem = new RunningContainerItem(container);
+                containerItem.OnStart += async (_, _) => await Dispatcher.Invoke(new Commands.StartContainer(container.Id));
+                containerItem.OnStop += async (_, _) => await Dispatcher.Invoke(new Commands.StopContainer(container.Id));
+                containerItem.OnRemove += async (_, _) => await Dispatcher.Invoke(new Commands.RemoveContainer(container.Id));
+                
+                var location = menu.IndexOf(noContainersItem);
+                menu.InsertItem(containerItem, location + 1);
+            }
+        }
+        
+        var leftoverItems = menu.Items.OfType<RunningContainerItem>().Where(i => runningContainers.All(c => c.Id != i.ContainerId)).ToList();
+        foreach (var item in leftoverItems)
         {
             menu.RemoveItem(item);
             item.Dispose();
-        }
-        
-        foreach (var container in store.RunningContainers.OrderByDescending(static c => c.Name))
-        {
-            var containerItem = new RunningContainerItem(container);
-            containerItem.OnStart += async (_, _) => await Dispatcher.Invoke(new Commands.StartContainer(container.Id));
-            containerItem.OnStop += async (_, _) => await Dispatcher.Invoke(new Commands.StopContainer(container.Id));
-            containerItem.OnRemove += async (_, _) => await Dispatcher.Invoke(new Commands.RemoveContainer(container.Id));
-            
-            var location = menu.IndexOf(noContainersItem);
-            menu.InsertItem(containerItem, location + 1);
         }
     }
 
