@@ -1,10 +1,16 @@
-﻿  <Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+  <PropertyGroup Label="Build">
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0-macos</TargetFramework>
     <AssemblyVersion>3.1.0</AssemblyVersion>
+  </PropertyGroup>
+  
+  <PropertyGroup Label="Publish">
     <PublishAsZip>true</PublishAsZip>
+    <ApplicationId>ch.phkiener.colimastatusbar</ApplicationId>
+    <ApplicationTitle>Colima StatusBar</ApplicationTitle>
+    <ApplicationVersion>$(AssemblyVersion)</ApplicationVersion>
   </PropertyGroup>
   
   <ItemGroup>

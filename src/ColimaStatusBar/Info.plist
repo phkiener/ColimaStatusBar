@@ -2,21 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>LSApplicationCategoryType</key>
-	<string>public.app-category.developer-tools</string>
-	<key>LSUIElement</key>
-	<true/>
-	<key>CFBundleIdentifier</key>
-	<string>ch.phkiener.colimastatusbar</string>
-	<key>CFBundleDisplayName</key>
-	<string>Colima StatusBar</string>
-	<key>CFBundleVersionString</key>
-	<string>3.1.0</string>
-	<key>CFBundleShortVersionString</key>
-	<string>3.1.0</string>
-	<key>NSHumanReadableCopyright</key>
-	<string>(c) 2025 Philipp Kiener</string>
+  <key>LSApplicationCategoryType</key>
+  <string>public.app-category.developer-tools</string>
+  <key>LSUIElement</key>
+  <true/>
+  <key>NSHumanReadableCopyright</key>
+  <string>(c) 2025 Philipp Kiener</string>
 </dict>
 </plist>
