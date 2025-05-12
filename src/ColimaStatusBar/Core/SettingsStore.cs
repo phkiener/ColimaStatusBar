@@ -1,15 +1,15 @@
-using ColimaStatusBar.Framework.Flux;
 using ServiceManagement;
+using Swallow.Flux;
 
 namespace ColimaStatusBar.Core;
 
 public sealed record LaunchAtLoginChanged : INotification;
 
-public sealed class SettingsStore(Emitter emitter) : IStore
+public sealed class SettingsStore(IEmitter emitter) : IStore
 {
     public bool StartAtLogin { get; private set; } = false;
 
-    Task IStore.Handle(ICommand command)
+    Task IStore.Handle(ICommand command, CancellationToken cancellationToken)
     {
         if (command is Commands.Initialize)
         {

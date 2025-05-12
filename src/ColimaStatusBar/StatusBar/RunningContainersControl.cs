@@ -1,10 +1,10 @@
 using ColimaStatusBar.Core;
 using ColimaStatusBar.Framework.AppKit;
-using ColimaStatusBar.Framework.Flux;
+using Swallow.Flux;
 
 namespace ColimaStatusBar.StatusBar;
 
-public sealed class RunningContainersControl(RunningContainersStore store, Dispatcher dispatcher, Binder binder) : Control<NSMenu>(dispatcher, binder)
+public sealed class RunningContainersControl(RunningContainersStore store, IDispatcher dispatcher, IBinder binder) : Control<NSMenu>(dispatcher, binder)
 {
     private readonly NSMenuItem noContainersItem = new("No containers running") { Enabled = false, Hidden = true };
     
@@ -31,9 +31,9 @@ public sealed class RunningContainersControl(RunningContainersStore store, Dispa
             if (existingItem is null)
             {
                 var containerItem = new RunningContainerItem(container);
-                containerItem.OnStart += async (_, _) => await Dispatcher.Invoke(new Commands.StartContainer(container.Id));
-                containerItem.OnStop += async (_, _) => await Dispatcher.Invoke(new Commands.StopContainer(container.Id));
-                containerItem.OnRemove += async (_, _) => await Dispatcher.Invoke(new Commands.RemoveContainer(container.Id));
+                containerItem.OnStart += async (_, _) => await Dispatcher.Dispatch(new Commands.StartContainer(container.Id));
+                containerItem.OnStop += async (_, _) => await Dispatcher.Dispatch(new Commands.StopContainer(container.Id));
+                containerItem.OnRemove += async (_, _) => await Dispatcher.Dispatch(new Commands.RemoveContainer(container.Id));
                 
                 var location = menu.IndexOf(noContainersItem);
                 menu.InsertItem(containerItem, location + 1);

@@ -1,8 +1,7 @@
 using ColimaStatusBar.Core;
-using ColimaStatusBar.Framework;
-using ColimaStatusBar.Framework.Flux;
 using ColimaStatusBar.StatusBar;
 using Microsoft.Extensions.DependencyInjection;
+using Swallow.Flux;
 
 namespace ColimaStatusBar;
 
@@ -11,7 +10,7 @@ public static class ServiceProviderConfig
     public static AsyncServiceScope BuildServiceScope()
     {
         var serviceProvider = new ServiceCollection()
-            .AddFramework()
+            .AddFlux()
             .AddCore()
             .AddStatusBar()
             .BuildServiceProvider();
@@ -21,7 +20,7 @@ public static class ServiceProviderConfig
 
     public static async Task Dispatch<TCommand>(this AsyncServiceScope scope) where TCommand : ICommand, new()
     {
-        var dispatcher = scope.ServiceProvider.GetRequiredService<Dispatcher>();
-        await dispatcher.Invoke<TCommand>();
+        var dispatcher = scope.ServiceProvider.GetRequiredService<IDispatcher>();
+        await dispatcher.Dispatch<TCommand>();
     }
 }

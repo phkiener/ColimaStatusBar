@@ -1,5 +1,5 @@
 using ColimaStatusBar.Core.Infrastructure;
-using ColimaStatusBar.Framework.Flux;
+using Swallow.Flux;
 
 namespace ColimaStatusBar.Core;
 
@@ -12,7 +12,7 @@ public sealed record ColimaProfileChanged : INotification;
 
 internal sealed record SocketChanged(string? SocketAddress) : INotification;
 
-public sealed class ColimaStatusStore(Emitter emitter) : IStore, IAsyncDisposable
+public sealed class ColimaStatusStore(IEmitter emitter) : IStore, IAsyncDisposable
 {
     private readonly CancellationTokenSource pollingCancelled = new();
     private Task pollingTask = Task.CompletedTask;
@@ -22,7 +22,7 @@ public sealed class ColimaStatusStore(Emitter emitter) : IStore, IAsyncDisposabl
     public ColimaStatus CurrentStatus { get; private set; } = ColimaStatus.Stopped;
     public RunningProfile? CurrentProfile { get; private set; }
 
-    async Task IStore.Handle(ICommand command)
+    async Task IStore.Handle(ICommand command, CancellationToken cancellation)
     {
         if (command is Commands.Initialize)
         {

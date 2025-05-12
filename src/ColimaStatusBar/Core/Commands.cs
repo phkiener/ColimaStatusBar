@@ -1,4 +1,4 @@
-using ColimaStatusBar.Framework.Flux;
+using Swallow.Flux;
 
 namespace ColimaStatusBar.Core;
 

@@ -1,4 +1,4 @@
-using ColimaStatusBar.Framework.Flux;
+using Swallow.Flux;
 
 namespace ColimaStatusBar.Core;
 
@@ -17,7 +17,7 @@ public sealed record RunningContainersChanged : INotification;
 
 public sealed class RunningContainersStore : IStore, IAsyncDisposable
 {
-    private readonly Emitter emitter;
+    private readonly IEmitter emitter;
     private readonly List<RunningContainer> runningContainers = [];
     
     private readonly CancellationTokenSource pollingCancelled = new();
@@ -27,7 +27,7 @@ public sealed class RunningContainersStore : IStore, IAsyncDisposable
     
     public IReadOnlyList<RunningContainer> RunningContainers => runningContainers.AsReadOnly();
 
-    public RunningContainersStore(Emitter emitter)
+    public RunningContainersStore(IEmitter emitter)
     {
         this.emitter = emitter;
         this.emitter.OnEmit += ObserveSocketChange;
@@ -41,7 +41,7 @@ public sealed class RunningContainersStore : IStore, IAsyncDisposable
         }
     }
 
-    async Task IStore.Handle(ICommand command)
+    async Task IStore.Handle(ICommand command, CancellationToken cancellation)
     {
         if (command is Commands.Initialize)
         {

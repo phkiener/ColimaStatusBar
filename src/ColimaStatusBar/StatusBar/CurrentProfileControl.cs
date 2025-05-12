@@ -1,10 +1,10 @@
 using ColimaStatusBar.Core;
 using ColimaStatusBar.Framework.AppKit;
-using ColimaStatusBar.Framework.Flux;
+using Swallow.Flux;
 
 namespace ColimaStatusBar.StatusBar;
 
-public sealed class CurrentProfileControl(ColimaStatusStore store, Dispatcher dispatcher, Binder binder) : Control<NSMenu>(dispatcher, binder)
+public sealed class CurrentProfileControl(ColimaStatusStore store, IDispatcher dispatcher, IBinder binder) : Control<NSMenu>(dispatcher, binder)
 {
     private const long gibibytesFactor = 1073741824;
 
@@ -66,12 +66,12 @@ public sealed class CurrentProfileControl(ColimaStatusStore store, Dispatcher di
     {
         if (store.CurrentStatus is ColimaStatus.Stopped)
         {
-            await Dispatcher.Invoke<Commands.StartColima>();
+            await Dispatcher.Dispatch<Commands.StartColima>();
         }
 
         if (store.CurrentStatus is ColimaStatus.Running)
         {
-            await Dispatcher.Invoke<Commands.StopColima>();
+            await Dispatcher.Dispatch<Commands.StopColima>();
         }
         
     }

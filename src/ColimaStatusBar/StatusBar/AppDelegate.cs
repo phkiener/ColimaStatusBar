@@ -1,6 +1,6 @@
 using ColimaStatusBar.Core;
 using ColimaStatusBar.Framework.AppKit;
-using ColimaStatusBar.Framework.Flux;
+using Swallow.Flux;
 
 namespace ColimaStatusBar.StatusBar;
 
@@ -9,7 +9,7 @@ public sealed class AppDelegate(
     CurrentProfileControl currentProfileControl,
     RunningContainersControl runningContainersControl,
     SettingsControl settingsControl,
-    Binder binder) : NSApplicationDelegate
+    IBinder binder) : NSApplicationDelegate
 {
     private NSStatusItem? statusItem;
     
@@ -40,11 +40,6 @@ public sealed class AppDelegate(
     {
         if (disposing && statusItem?.Menu is not null)
         {
-            binder.Dispose();
-            currentProfileControl.Dispose();
-            runningContainersControl.Dispose();
-            settingsControl.Dispose();
-
             statusItem.Menu.Dispose();
             statusItem.Dispose();
             

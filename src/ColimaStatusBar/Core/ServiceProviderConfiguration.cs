@@ -1,5 +1,5 @@
-using ColimaStatusBar.Framework;
 using Microsoft.Extensions.DependencyInjection;
+using Swallow.Flux;
 
 namespace ColimaStatusBar.Core;
 
