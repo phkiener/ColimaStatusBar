@@ -13,7 +13,7 @@ public static class ProcessRunner
         var processInfo = new ProcessStartInfo
         {
             FileName = Shell,
-            Arguments = $"-r --login -c \"{executable} {string.Join(" ", args)}\"",
+            Arguments = $"--login -c \"{executable} {string.Join(" ", args)}\"",
             UseShellExecute = false,
             CreateNoWindow = true,
             RedirectStandardOutput = true,
