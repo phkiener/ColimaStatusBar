@@ -14,8 +14,7 @@ public sealed class SettingsControl(SettingsStore store, IDispatcher dispatcher,
         target.AddItem(launchAtLoginItem);
         target.AddItem(quitItem);
 
-        UpdateCellState(launchAtLoginItem);
-        Binder.BindControl(launchAtLoginItem).To<LaunchAtLoginChanged>(UpdateCellState);
+        Binder.BindControl(launchAtLoginItem).To<LaunchAtLoginChanged>(UpdateCellState, immediatelyInvoke: true);
 
         launchAtLoginItem.Activated += OnLaunchAtLoginClicked;
         quitItem.Activated += OnQuitClicked;

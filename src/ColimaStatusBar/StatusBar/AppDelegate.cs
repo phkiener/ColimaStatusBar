@@ -24,8 +24,7 @@ public sealed class AppDelegate(
         statusItem.Menu.AddItem(NSMenuItem.SeparatorItem);
         settingsControl.Attach(statusItem.Menu);
 
-        SetStatusImage(statusItem);
-        binder.BindControl(statusItem).To<ColimaStatusChanged>(SetStatusImage);
+        binder.BindControl(statusItem).To<ColimaStatusChanged>(SetStatusImage, immediatelyInvoke: true);
     }
 
     private void SetStatusImage(NSStatusItem item)

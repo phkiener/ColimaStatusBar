@@ -12,11 +12,8 @@ public sealed class RunningContainersControl(RunningContainersStore store, IDisp
     {
         target.AddItem(noContainersItem);
         
-        UpdateContainers(target);
-        Binder.BindControl(target).To<RunningContainersChanged>(UpdateContainers);
-
-        TogglePlaceholder(noContainersItem);
-        Binder.BindControl(noContainersItem).To<RunningContainersChanged>(TogglePlaceholder);
+        Binder.BindControl(target).To<RunningContainersChanged>(UpdateContainers, immediatelyInvoke: true);
+        Binder.BindControl(noContainersItem).To<RunningContainersChanged>(TogglePlaceholder, immediatelyInvoke: true);
     }
 
     private void UpdateContainers(NSMenu menu)

@@ -18,14 +18,9 @@ public sealed class CurrentProfileControl(ColimaStatusStore store, IDispatcher d
         target.AddItem(profileDetailsItem);
         target.AddItem(toggleColimaItem);
         
-        UpdateRunningProfile(currentProfileItem);
-        Binder.BindControl(currentProfileItem).To<ColimaProfileChanged>(UpdateRunningProfile);
-        
-        UpdateProfileDetails(profileDetailsItem);
-        Binder.BindControl(profileDetailsItem).To<ColimaProfileChanged>(UpdateProfileDetails);
-        
-        UpdateStatusToggle(toggleColimaItem);
-        Binder.BindControl(toggleColimaItem).To<ColimaStatusChanged>(UpdateStatusToggle);
+        Binder.BindControl(currentProfileItem).To<ColimaProfileChanged>(UpdateRunningProfile, immediatelyInvoke: true);
+        Binder.BindControl(profileDetailsItem).To<ColimaProfileChanged>(UpdateProfileDetails, immediatelyInvoke: true);
+        Binder.BindControl(toggleColimaItem).To<ColimaStatusChanged>(UpdateStatusToggle, immediatelyInvoke: true);
 
         toggleColimaItem.Activated += OnStatusToggleClicked;
     }
