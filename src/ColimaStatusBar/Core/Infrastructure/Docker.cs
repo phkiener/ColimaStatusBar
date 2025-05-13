@@ -1,6 +1,5 @@
+using System.Net.Http.Json;
 using System.Net.Sockets;
-using System.Text;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace ColimaStatusBar.Core.Infrastructure;
@@ -9,63 +8,45 @@ public static class Docker
 {
     public static async Task<IReadOnlyList<RunningContainer>> StatusAsync(string socketAddress, CancellationToken cancellationToken)
     {
-        var response = await SendRequestAsync(socketAddress, "GET", "/containers/json?all=true", cancellationToken);
-
-        var containers = JsonSerializer.Deserialize<ContainerOutput[]>(response) ?? [];
-        return containers.Select(
-                static c => new RunningContainer(Id: c.Id, Name: c.Name, Image: c.Image, Enum.Parse<ContainerState>(c.State, ignoreCase: true)))
-            .ToArray();
+        var client = GetSocketClient(socketAddress);
+        var containers = await client.GetFromJsonAsync<ContainerOutput[]>("/containers/json?all=true", cancellationToken) ?? [];
+        
+        return containers.Select(static c => c.AsRunningContainer()).ToArray();
     }
 
     public static async Task StartAsync(string socketAddress, string id, CancellationToken cancellationToken)
     {
-        await SendRequestAsync(socketAddress, "POST", $"/containers/{id}/start", cancellationToken);
+        var client = GetSocketClient(socketAddress);
+        await client.PostAsync($"/containers/{id}/start", null, cancellationToken);
     }
 
     public static async Task StopAsync(string socketAddress, string id, CancellationToken cancellationToken)
     {
-        await SendRequestAsync(socketAddress, "POST", $"/containers/{id}/stop", cancellationToken);
+        var client = GetSocketClient(socketAddress);
+        await client.PostAsync($"/containers/{id}/stop", null, cancellationToken);
     }
 
     public static async Task RemoveAsync(string socketAddress, string id, CancellationToken cancellationToken)
     {
-        await SendRequestAsync(socketAddress, "DELETE", $"/containers/{id}", cancellationToken);
+        var client = GetSocketClient(socketAddress);
+        await client.DeleteAsync($"/containers/{id}", cancellationToken);
     }
 
-    private static async Task<string> SendRequestAsync(string socketAddress, string method, string requestPath, CancellationToken cancellationToken)
+    private static HttpClient GetSocketClient(string socketAddress)
     {
-        var typedSocketAddress = new Uri(socketAddress);
-        using var memoryStream = new MemoryStream();
-        using var socket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
-        
-        var unixDomainSocketEndPoint = new UnixDomainSocketEndPoint(typedSocketAddress.AbsolutePath);
-        await socket.ConnectAsync(unixDomainSocketEndPoint, cancellationToken);
-        
-        var request = Encoding.UTF8.GetBytes($"{method} {requestPath} HTTP/1.1\r\nHost: 127.0.0.1\r\nAccept: application/json\r\n\r\n");
-        await socket.SendAsync(request, cancellationToken);
-        
-        var receiveBuffer = new byte[1024];
-        while (socket.Connected && !cancellationToken.IsCancellationRequested)
+        var handler = new SocketsHttpHandler
         {
-            var bytesRead = await socket.ReceiveAsync(receiveBuffer, cancellationToken);
-            memoryStream.Write(receiveBuffer, 0, bytesRead);
-
-            if (bytesRead is 0 || socket.Available is 0)
+            ConnectCallback = async (_, cancellation) =>
             {
-                break;
+                var socket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
+                var endpoint = new UnixDomainSocketEndPoint(socketAddress);
+
+                await socket.ConnectAsync(endpoint, cancellation);
+                return new NetworkStream(socket, ownsSocket: true);
             }
-        }
-        
-        await socket.DisconnectAsync(true, cancellationToken);
-        var responseText = Encoding.UTF8.GetString(memoryStream.ToArray());
+        };
 
-        if (!responseText.StartsWith("HTTP/1.1 2"))
-        {
-            throw new InvalidOperationException($"Socket returned some bad stuff: {responseText}");
-        }
-
-        var endOfHeader = responseText.IndexOf("\r\n\r\n", StringComparison.OrdinalIgnoreCase);
-        return responseText[endOfHeader..].Trim();
+        return new HttpClient(handler, disposeHandler: true) { BaseAddress = new Uri("http://localhost") };
     }
 
     private sealed class ContainerOutput
@@ -86,7 +67,14 @@ public static class Docker
         [JsonPropertyName("State")]
         public required string State { get; set; }
 
-        public string Name => GetPrimaryName();
+        public RunningContainer AsRunningContainer()
+        {
+            return new RunningContainer(
+                Id: Id,
+                Name: GetPrimaryName(),
+                Image: Image,
+                State: Enum.Parse<ContainerState>(State, ignoreCase: true));
+        }
         
         private string GetPrimaryName()
         {

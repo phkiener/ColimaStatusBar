@@ -6,16 +6,18 @@ namespace ColimaStatusBar.StatusBar;
 
 public sealed class SettingsControl(SettingsStore store, IDispatcher dispatcher, IBinder binder) : Control<NSMenu>(dispatcher, binder)
 {
-    private readonly NSMenuItem laucnhAtLoginItem = new("Launch at login");
+    private readonly NSMenuItem launchAtLoginItem = new("Launch at login");
     private readonly NSMenuItem quitItem = new("Quit");
     
     protected override void OnAttach(NSMenu target)
     {
-        target.AddItem(laucnhAtLoginItem);
+        target.AddItem(launchAtLoginItem);
         target.AddItem(quitItem);
 
-        Binder.BindControl(laucnhAtLoginItem).To<LaunchAtLoginChanged>(UpdateCellState);
-        laucnhAtLoginItem.Activated += OnLaunchAtLoginClicked;
+        UpdateCellState(launchAtLoginItem);
+        Binder.BindControl(launchAtLoginItem).To<LaunchAtLoginChanged>(UpdateCellState);
+
+        launchAtLoginItem.Activated += OnLaunchAtLoginClicked;
         quitItem.Activated += OnQuitClicked;
     }
 

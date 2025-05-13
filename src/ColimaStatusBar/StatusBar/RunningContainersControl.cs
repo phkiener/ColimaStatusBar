@@ -11,7 +11,11 @@ public sealed class RunningContainersControl(RunningContainersStore store, IDisp
     protected override void OnAttach(NSMenu target)
     {
         target.AddItem(noContainersItem);
+        
+        UpdateContainers(target);
         Binder.BindControl(target).To<RunningContainersChanged>(UpdateContainers);
+
+        TogglePlaceholder(noContainersItem);
         Binder.BindControl(noContainersItem).To<RunningContainersChanged>(TogglePlaceholder);
     }
 
