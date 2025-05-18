@@ -1,5 +1,5 @@
 ﻿using ColimaStatusBar;
-using ColimaStatusBar.Core;
+using ColimaStatusBar.Core.Abstractions;
 using ColimaStatusBar.Ui;
 using Microsoft.Extensions.DependencyInjection;
 

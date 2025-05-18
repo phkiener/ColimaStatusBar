@@ -9,16 +9,16 @@ public sealed class ColimaPollingJob(IShellExecutor shellExecutor, Action<Colima
 {
     protected override TimeSpan Interval { get; } = TimeSpan.FromSeconds(5);
 
-    protected override async Task Run(CancellationToken token)
+    protected override async Task Run(CancellationToken cancellationToken)
     {
-        var result = await shellExecutor.Run("colima", ["list", "-j"], token);
+        var result = await shellExecutor.Run("colima", ["list", "-j"], cancellationToken);
         if (result.ExitCode is not 0)
         {
             // Colima not installed? We don't really know, so just don't do anything.
             return;
         }
 
-        var profiles = result.Output.Split('\n')
+        var profiles = result.Output.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Select(ParseProfile)
             .ToArray();
         
@@ -43,19 +43,24 @@ public sealed class ColimaPollingJob(IShellExecutor shellExecutor, Action<Colima
 
     private sealed class ColimaListOutput
     {
+        [JsonRequired]
         [JsonPropertyName("name")]
-        public string Name { get; init; } = "";
+        public required string Name { get; init; }
         
+        [JsonRequired]
         [JsonPropertyName("status")]
-        public string Status { get; init; } = "";
+        public required string Status { get; init; }
         
+        [JsonRequired]
         [JsonPropertyName("cpus")]
-        public int CpuCount { get; init; } = 0;
+        public required int CpuCount { get; init; }
         
+        [JsonRequired]
         [JsonPropertyName("memory")]
-        public long Memory { get; init; } = 0;
+        public required long Memory { get; init; }
         
+        [JsonRequired]
         [JsonPropertyName("disk")]
-        public long Disk { get; init; } = 0;
+        public required long Disk { get; init; }
     }
 }

@@ -12,7 +12,4 @@ public static class Commands
     public sealed record RemoveContainer(string Id) : ICommand;
     
     public sealed record LaunchAtLogin(bool Enabled) : ICommand;
-    
-    public sealed record Initialize : ICommand;
-    public sealed record Shutdown : ICommand;
 }

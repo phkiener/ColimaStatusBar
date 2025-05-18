@@ -12,7 +12,7 @@ public sealed class CurrentProfileControl(IColima colima, IDispatcher dispatcher
 
     private readonly List<ProfileItems> profileItems = new();
     private readonly NSMenuItem manageDefaultProfile = new() { Hidden = true };
-    private readonly NSMenuItem manageProfiles = new("Manage profiles") { Hidden = true, Menu = new NSMenu() };
+    private readonly NSMenuItem manageProfiles = new("Manage profiles") { Hidden = true, Submenu = new NSMenu() };
 
     protected override void OnAttach(NSMenu target)
     {
@@ -39,6 +39,7 @@ public sealed class CurrentProfileControl(IColima colima, IDispatcher dispatcher
         if (profile is not null && profileItems.All(p => p.Name != notification.Name))
         {
             AddProfile(menu, profile);
+            UpdateDefaultProfile();
         }
     }
 
@@ -54,7 +55,9 @@ public sealed class CurrentProfileControl(IColima colima, IDispatcher dispatcher
         
         menu.RemoveItem(profileItem.Details);
         menu.RemoveItem(profileItem.Status);
-        manageProfiles.Menu?.RemoveItem(profileItem.Manage);
+        manageProfiles.Submenu?.RemoveItem(profileItem.Manage);
+        
+        UpdateDefaultProfile();
     }
 
     private void OnProfileStatusChanged(NSMenu menu, ProfileStatusChanged notification)
@@ -85,7 +88,7 @@ public sealed class CurrentProfileControl(IColima colima, IDispatcher dispatcher
         menu.InsertItem(profileDetails.Details, position);
         menu.InsertItem(profileDetails.Status, position);
         
-        manageProfiles.Menu?.AddItem(profileDetails.Manage);
+        manageProfiles.Submenu?.AddItem(profileDetails.Manage);
     }
 
     private async void ToggleProfile(string? profileName)
@@ -124,8 +127,8 @@ public sealed class CurrentProfileControl(IColima colima, IDispatcher dispatcher
         {
             ProfileStatus.Stopping => $"Profile '{profile.Name}' is stopping...",
             ProfileStatus.Starting => $"Profile '{profile.Name}' is starting...",
-            ProfileStatus.Running => $"Profile '{profile.Name}' is running",
-            _ => $"Profile '{profile.Name}' is stopped"
+            ProfileStatus.Running => $"Stop profile '{profile.Name}'",
+            _ => $"Start profile '{profile.Name}'"
         };
     }
 
@@ -138,8 +141,8 @@ public sealed class CurrentProfileControl(IColima colima, IDispatcher dispatcher
         {
             ProfileStatus.Stopping => "Colima is stopping...",
             ProfileStatus.Starting => "Colima is starting...",
-            ProfileStatus.Running => "Colima is running",
-            _ => "Colima is stopped"
+            ProfileStatus.Running => "Stop colima",
+            _ => "Start colima"
         };
         
         manageProfiles.Hidden = singleProfile;

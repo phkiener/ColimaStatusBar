@@ -41,7 +41,7 @@ public abstract class BackgroundJob
     
     protected abstract TimeSpan Interval { get; }
     
-    protected abstract Task Run(CancellationToken token);
+    protected abstract Task Run(CancellationToken cancellationToken);
 
     protected virtual void OnException(Exception exception)
     {

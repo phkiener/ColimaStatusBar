@@ -28,12 +28,6 @@ public sealed class RunningContainersStore(IEmitter emitter) : IStore, IAsyncDis
 
     async Task IStore.Handle(ICommand command, CancellationToken cancellation)
     {
-        if (command is Commands.Initialize)
-        {
-            pollingTask = FetchRunningContainersAsync();
-            return;
-        }
-
         if (command is Commands.StartContainer startContainer && currentSocket is not null)
         {
             await Infrastructure.Docker.StartAsync(currentSocket, startContainer.Id, pollingCancelled.Token);
@@ -55,12 +49,6 @@ public sealed class RunningContainersStore(IEmitter emitter) : IStore, IAsyncDis
             await Infrastructure.Docker.RemoveAsync(currentSocket, removeContainer.Id, pollingCancelled.Token);
             await FetchStatusAsync();
             
-            return;
-        }
-
-        if (command is Commands.Shutdown)
-        {
-            _ = pollingCancelled.CancelAsync();
             return;
         }
     }
