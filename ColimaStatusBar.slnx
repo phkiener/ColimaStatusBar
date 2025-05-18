@@ -11,7 +11,7 @@
   <Project Path="src/ColimaStatusBar/ColimaStatusBar.csproj" />
   <Project Path="src/ColimaStatusBar.Ui/ColimaStatusBar.Ui.csproj" />
   <Folder Name="/Core/">
-    <Project Path="ColimaStatusBar.Core.Abstractions/ColimaStatusBar.Core.Abstractions.csproj" />
+    <Project Path="src/ColimaStatusBar.Core.Abstractions/ColimaStatusBar.Core.Abstractions.csproj" />
     <Project Path="src/ColimaStatusBar.Core/ColimaStatusBar.Core.csproj" />
     <Project Path="test/ColimaStatusBar.Core.Test/ColimaStatusBar.Core.Test.csproj" />
   </Folder>
