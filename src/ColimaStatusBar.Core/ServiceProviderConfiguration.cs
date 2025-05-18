@@ -1,5 +1,6 @@
 using ColimaStatusBar.Core.Abstractions;
 using ColimaStatusBar.Core.Colima;
+using ColimaStatusBar.Core.Docker;
 using ColimaStatusBar.Core.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Swallow.Flux;
@@ -12,6 +13,7 @@ public static class ServiceProviderConfiguration
     {
         return services
             .AddStore<IColima, ColimaStore>()
+            .AddStore<IDocker, DockerStore>()
             .AddStore<ISettings, SettingsStore>();
     }
 }

@@ -30,14 +30,14 @@ public sealed class DockerPollingJob(IShellExecutor shellExecutor, Action<Runnin
                 continue;
             }
             
-            var containers = containersResponse.Output.Split('\n').Select(ParseContainer);
+            var containers = containersResponse.Output.Split('\n').Select(l => ParseContainer(l, context));
             allContainers.AddRange(containers);
         }
         
         containerCallback.Invoke(allContainers.ToArray());
     }
 
-    private static RunningContainer ParseContainer(string line)
+    private static RunningContainer ParseContainer(string line, string context)
     {
         var segments = line.Split('\t');
 
@@ -45,6 +45,7 @@ public sealed class DockerPollingJob(IShellExecutor shellExecutor, Action<Runnin
             Id: segments[0],
             Image: segments[1],
             Name: segments[3],
+            Context: context,
             State: Enum.Parse<ContainerState>(segments[2]));
     }
 }
