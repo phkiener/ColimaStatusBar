@@ -1,6 +1,6 @@
 ﻿using ColimaStatusBar;
 using ColimaStatusBar.Core;
-using ColimaStatusBar.StatusBar;
+using ColimaStatusBar.Ui;
 using Microsoft.Extensions.DependencyInjection;
 
 await using var scope = ServiceProviderConfig.BuildServiceScope();

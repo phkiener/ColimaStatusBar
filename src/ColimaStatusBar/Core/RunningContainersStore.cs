@@ -15,31 +15,16 @@ public sealed record RunningContainer(string Id, string Name, string Image, Cont
 
 public sealed record RunningContainersChanged : INotification;
 
-public sealed class RunningContainersStore : IStore, IAsyncDisposable
+public sealed class RunningContainersStore(IEmitter emitter) : IStore, IAsyncDisposable
 {
-    private readonly IEmitter emitter;
     private readonly List<RunningContainer> runningContainers = [];
     
     private readonly CancellationTokenSource pollingCancelled = new();
     private Task pollingTask = Task.CompletedTask;
     private bool isPolling => !pollingCancelled.IsCancellationRequested;
-    private string? currentSocket;
+    private readonly string? currentSocket = "";
     
     public IReadOnlyList<RunningContainer> RunningContainers => runningContainers.AsReadOnly();
-
-    public RunningContainersStore(IEmitter emitter)
-    {
-        this.emitter = emitter;
-        this.emitter.OnEmit += ObserveSocketChange;
-    }
-
-    private void ObserveSocketChange(object? sender, INotification notification)
-    {
-        if (notification is SocketChanged socketChanged)
-        {
-            currentSocket = socketChanged.SocketAddress;
-        }
-    }
 
     async Task IStore.Handle(ICommand command, CancellationToken cancellation)
     {
@@ -142,8 +127,6 @@ public sealed class RunningContainersStore : IStore, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        emitter.OnEmit -= ObserveSocketChange;
-
         if (isPolling)
         {
             await pollingCancelled.CancelAsync();

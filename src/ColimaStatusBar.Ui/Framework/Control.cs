@@ -1,6 +1,6 @@
 using Swallow.Flux;
 
-namespace ColimaStatusBar.Framework.AppKit;
+namespace ColimaStatusBar.Ui.Framework;
 
 public abstract class Control<TParent>(IDispatcher dispatcher, IBinder binder) where TParent : NSObject
 {

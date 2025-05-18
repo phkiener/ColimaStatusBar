@@ -1,14 +1,13 @@
 using System.Diagnostics;
+using ColimaStatusBar.Core.Platform;
 
-namespace ColimaStatusBar.Framework;
+namespace ColimaStatusBar.Platform;
 
-public sealed record ProcessResult(int ExitCode, string Output);
-
-public static class ProcessRunner
+internal sealed class ShellExecutor : IShellExecutor
 {
     private static readonly string Shell =  Environment.GetEnvironmentVariable("SHELL") ?? "/bin/zsh";
     
-    public static async Task<ProcessResult> RunAsShell(string executable, string[] args, CancellationToken cancellationToken)
+    public async Task<ProcessResult> Run(string executable, string[] args, CancellationToken cancellationToken)
     {
         var processInfo = new ProcessStartInfo
         {

@@ -1,13 +1,13 @@
-using ColimaStatusBar.Core;
-using ColimaStatusBar.Framework.AppKit;
+using ColimaStatusBar.Core.Abstractions;
+using ColimaStatusBar.Ui.Controls;
+using ColimaStatusBar.Ui.Framework;
 using Swallow.Flux;
 
-namespace ColimaStatusBar.StatusBar;
+namespace ColimaStatusBar.Ui;
 
 public sealed class AppDelegate(
-    ColimaStatusStore store,
+    IColima colima,
     CurrentProfileControl currentProfileControl,
-    RunningContainersControl runningContainersControl,
     SettingsControl settingsControl,
     IBinder binder) : NSApplicationDelegate
 {
@@ -20,18 +20,20 @@ public sealed class AppDelegate(
 
         currentProfileControl.Attach(statusItem.Menu);
         statusItem.Menu.AddItem(NSMenuItem.SeparatorItem);
-        runningContainersControl.Attach(statusItem.Menu);
-        statusItem.Menu.AddItem(NSMenuItem.SeparatorItem);
+        
+        // runningContainersControl.Attach(statusItem.Menu);
+        // statusItem.Menu.AddItem(NSMenuItem.SeparatorItem);
+        
         settingsControl.Attach(statusItem.Menu);
 
-        binder.BindControl(statusItem).To<ColimaStatusChanged>(SetStatusImage, immediatelyInvoke: true);
+        binder.BindControl(statusItem).To<ProfileStatusChanged>(SetStatusImage, immediatelyInvoke: true);
     }
 
     private void SetStatusImage(NSStatusItem item)
     {
-        item.Button.Image = store.CurrentStatus switch
+        item.Button.Image = colima.OverallStatus switch
         {
-            ColimaStatus.Running => NSImage.GetSystemSymbol("shippingbox.fill", null),
+            ProfileStatus.Running => NSImage.GetSystemSymbol("shippingbox.fill", null),
             _ => NSImage.GetSystemSymbol("shippingbox", null)
         };
     }
@@ -42,7 +44,6 @@ public sealed class AppDelegate(
         {
             statusItem.Menu.Dispose();
             statusItem.Dispose();
-            
         }
     }
 }

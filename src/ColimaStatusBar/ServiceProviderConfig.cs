@@ -1,5 +1,5 @@
 using ColimaStatusBar.Core;
-using ColimaStatusBar.StatusBar;
+using ColimaStatusBar.Ui;
 using Microsoft.Extensions.DependencyInjection;
 using Swallow.Flux;
 
@@ -11,6 +11,7 @@ public static class ServiceProviderConfig
     {
         var serviceProvider = new ServiceCollection()
             .AddFlux()
+            .AddPlatform()
             .AddCore()
             .AddStatusBar()
             .BuildServiceProvider();

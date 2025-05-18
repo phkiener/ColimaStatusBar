@@ -1,6 +1,6 @@
 using Swallow.Flux;
 
-namespace ColimaStatusBar.Framework.AppKit;
+namespace ColimaStatusBar.Ui.Framework;
 
 public static class BinderExtensions
 {

@@ -1,10 +1,10 @@
-using ColimaStatusBar.Core;
-using ColimaStatusBar.Framework.AppKit;
+using ColimaStatusBar.Core.Abstractions;
+using ColimaStatusBar.Ui.Framework;
 using Swallow.Flux;
 
-namespace ColimaStatusBar.StatusBar;
+namespace ColimaStatusBar.Ui.Controls;
 
-public sealed class SettingsControl(SettingsStore store, IDispatcher dispatcher, IBinder binder) : Control<NSMenu>(dispatcher, binder)
+public sealed class SettingsControl(ISettings settings, IDispatcher dispatcher, IBinder binder) : Control<NSMenu>(dispatcher, binder)
 {
     private readonly NSMenuItem launchAtLoginItem = new("Launch at login");
     private readonly NSMenuItem quitItem = new("Quit");
@@ -22,12 +22,13 @@ public sealed class SettingsControl(SettingsStore store, IDispatcher dispatcher,
 
     private void UpdateCellState(NSMenuItem item)
     {
-        item.State = store.StartAtLogin ? NSCellStateValue.On : NSCellStateValue.Off;
+        item.State = settings.LaunchAtLogin ? NSCellStateValue.On : NSCellStateValue.Off;
     }
 
     private async void OnLaunchAtLoginClicked(object? sender, EventArgs args)
     {
-        await Dispatcher.Dispatch(new Commands.LaunchAtLogin(!store.StartAtLogin));
+        var toggledState = !settings.LaunchAtLogin;
+        await Dispatcher.Dispatch(new Commands.LaunchAtLogin(toggledState));
     }
     
     private void OnQuitClicked(object? sender, EventArgs args)

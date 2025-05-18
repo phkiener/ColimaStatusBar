@@ -1,14 +1,15 @@
+using ColimaStatusBar.Ui.Controls;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ColimaStatusBar.StatusBar;
+namespace ColimaStatusBar.Ui;
 
 public static class ServiceProviderConfiguration
 {
     public static IServiceCollection AddStatusBar(this IServiceCollection services)
     {
-        return services.AddScoped<AppDelegate>()
+        return services
+            .AddScoped<AppDelegate>()
             .AddScoped<CurrentProfileControl>()
-            .AddScoped<RunningContainersControl>()
             .AddScoped<SettingsControl>();
     }
 }
