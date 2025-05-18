@@ -6,7 +6,15 @@ namespace ColimaStatusBar.Ui.Controls;
 
 public sealed class CurrentProfileControl(IColima colima, IDispatcher dispatcher, IBinder binder) : Control<NSMenu>(dispatcher, binder)
 {
-    private sealed record ProfileItems(string Name, NSMenuItem Status, NSMenuItem Details, NSMenuItem Manage);
+    private sealed record ProfileItems(string Name, NSMenuItem Status, NSMenuItem Details, NSMenuItem Manage) : IDisposable
+    {
+        public void Dispose()
+        {
+            Status.Dispose();
+            Details.Dispose();
+            Manage.Dispose();
+        }
+    }
 
     private const long gibibytesFactor = 1073741824;
 
@@ -51,11 +59,12 @@ public sealed class CurrentProfileControl(IColima colima, IDispatcher dispatcher
             return;
         }
         
-        profileItems.Remove(profileItem);
-        
         menu.RemoveItem(profileItem.Details);
         menu.RemoveItem(profileItem.Status);
         manageProfiles.Submenu?.RemoveItem(profileItem.Manage);
+        
+        profileItems.Remove(profileItem);
+        profileItem.Dispose();
         
         UpdateDefaultProfile();
     }

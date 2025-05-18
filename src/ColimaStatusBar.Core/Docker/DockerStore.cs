@@ -24,6 +24,8 @@ public sealed class DockerStore : AbstractStore, IDocker
     }
 
     public IEnumerable<RunningContainer> RunningContainers => containers.Values;
+    
+    public RunningContainer? GetContainer(string id) => containers.GetValueOrDefault(id);
 
     private void StartPolling()
     {

@@ -8,6 +8,7 @@ namespace ColimaStatusBar.Ui;
 public sealed class AppDelegate(
     IColima colima,
     CurrentProfileControl currentProfileControl,
+    RunningContainersControl runningContainersControl,
     SettingsControl settingsControl,
     IBinder binder) : NSApplicationDelegate
 {
@@ -21,12 +22,15 @@ public sealed class AppDelegate(
         currentProfileControl.Attach(statusItem.Menu);
         statusItem.Menu.AddItem(NSMenuItem.SeparatorItem);
         
-        // runningContainersControl.Attach(statusItem.Menu);
-        // statusItem.Menu.AddItem(NSMenuItem.SeparatorItem);
+        runningContainersControl.Attach(statusItem.Menu);
+        statusItem.Menu.AddItem(NSMenuItem.SeparatorItem);
         
         settingsControl.Attach(statusItem.Menu);
 
-        binder.BindControl(statusItem).To<ProfileStatusChanged>(SetStatusImage, immediatelyInvoke: true);
+        binder.BindControl(statusItem)
+            .To<ProfileStatusChanged>(SetStatusImage, immediatelyInvoke: true)
+            .To<ProfileAdded>(SetStatusImage)
+            .To<ProfileRemoved>(SetStatusImage);
     }
 
     private void SetStatusImage(NSStatusItem item)

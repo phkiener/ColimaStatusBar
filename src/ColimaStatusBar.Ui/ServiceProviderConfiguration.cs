@@ -10,6 +10,7 @@ public static class ServiceProviderConfiguration
         return services
             .AddScoped<AppDelegate>()
             .AddScoped<CurrentProfileControl>()
+            .AddScoped<RunningContainersControl>()
             .AddScoped<SettingsControl>();
     }
 }

@@ -20,4 +20,6 @@ public sealed record ContainerRemoved(string Id) : INotification;
 public interface IDocker : IStore
 {
     IEnumerable<RunningContainer> RunningContainers { get; }
+
+    RunningContainer? GetContainer(string id);
 }
