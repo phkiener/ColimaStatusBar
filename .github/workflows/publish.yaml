@@ -10,7 +10,10 @@ env:
     
 jobs:
   build:
-    runs-on: macos-15 # dotnet SDK 9.0.2 is implicitly installed on this
+    runs-on: macos-15
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v4
         
