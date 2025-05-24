@@ -21,7 +21,10 @@ public abstract class BackgroundJob
 
         if (pollTimer is not null)
         {
-            await pollTimer.DisposeAsync();
+            pollTimer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+            
+            // Don't DisposeAsync here, we don't need to wait for the spawned tasks - just make sure that no new ones are getting spawned
+            pollTimer.Dispose();
             pollTimer = null;
         }
     }
@@ -31,9 +34,14 @@ public abstract class BackgroundJob
         try
         {
             var cancellationToken = state is CancellationTokenSource tokenSource ? tokenSource.Token : CancellationToken.None;
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
             await Run(cancellationToken);
         }
-        catch (Exception e)
+        catch (Exception e) when (e is not OperationCanceledException or TaskCanceledException)
         {
             OnException(e);
         }
