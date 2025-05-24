@@ -17,8 +17,13 @@ public sealed class RunningContainersControl(IDocker docker, IDispatcher dispatc
             .To<ContainerAdded>(OnContainerAdded)
             .To<ContainerRemoved>(OnContainerRemoved)
             .To<ContainerStatusChanged>(OnContainerStatusChanged);
+        
+        Binder.BindControl(noContainersItem)
+            .To<ContainerAdded>(UpdatePlaceholderItem)
+            .To<ContainerRemoved>(UpdatePlaceholderItem)
+            .To<ContainerStatusChanged>(UpdatePlaceholderItem);
 
-        UpdatePlaceholderItem();
+        UpdatePlaceholderItem(noContainersItem);
         foreach (var container in docker.RunningContainers)
         {
             AddContainer(target, container);
@@ -62,8 +67,6 @@ public sealed class RunningContainersControl(IDocker docker, IDispatcher dispatc
 
     private void OnContainerStatusChanged(NSMenu menu, ContainerStatusChanged statusChanged)
     {
-        UpdatePlaceholderItem();
-
         var menuItem = containers.GetValueOrDefault(statusChanged.Id);
         var container = docker.GetContainer(statusChanged.Id);
 
@@ -107,9 +110,9 @@ public sealed class RunningContainersControl(IDocker docker, IDispatcher dispatc
         item.Submenu.Items[7].Hidden = !container.CanRemove;
     }
 
-    private void UpdatePlaceholderItem()
+    private void UpdatePlaceholderItem(NSMenuItem item)
     {
-        noContainersItem.Hidden = docker.RunningContainers.Any();
+        item.Hidden = docker.RunningContainers.Any();
     }
     
     private static void CopyToClipboard(string text)
