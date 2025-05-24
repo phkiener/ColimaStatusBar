@@ -22,12 +22,9 @@ jobs:
         
       - name: Restore NuGet packages
         run: dotnet restore
-        
-      - name: Build application
-        run: dotnet build --configuration Release --no-restore -p:AssemblyVersion=${{ github.ref_name }}
 
       - name: Publish app bundle
-        run: dotnet publish --configuration Release --no-build --no-restore -p:AssemblyVersion=${{ github.ref_name }} -o publish/
+        run: dotnet publish --configuration Release --no-restore -p:AssemblyVersion=${{ github.ref_name }} -o publish/ src/ColimaStatusBar
         
       - name: Upload bundle to release
         uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631
@@ -35,4 +32,3 @@ jobs:
           files: |
             publish/ColimaStatusBar-${{ github.ref_name }}.zip
             publish/ColimaStatusBar-${{ github.ref_name }}.zip-CHECKSUM
-

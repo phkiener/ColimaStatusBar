@@ -24,5 +24,5 @@ brew install phkiener/personal/colima-status-bar
 
 ## Requirements
 
-`colima` is being invoked via your `$SHELL`, defaulting to `/bin/zsh`. Next to the command, the `--login` flag is passed as well to make sure that
-e.g. your `homebrew`-path is available. If your shell doesn't support that... you're outta luck, sorry.
+`colima` and `docker` are being invoked via your `$SHELL`, defaulting to `/bin/zsh`. Next to the command, the `--login` flag is passed as well to
+make sure that e.g. your `homebrew`-path is available. If your shell doesn't support that... you're outta luck, sorry.
