@@ -16,15 +16,11 @@ public abstract class BackgroundJob
         if (cancellationTokenSource is not null)
         {
             await cancellationTokenSource.CancelAsync();
-            cancellationTokenSource = null;
         }
 
         if (pollTimer is not null)
         {
-            pollTimer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
-            
-            // Don't DisposeAsync here, we don't need to wait for the spawned tasks - just make sure that no new ones are getting spawned
-            pollTimer.Dispose();
+            await pollTimer.DisposeAsync();
             pollTimer = null;
         }
     }
