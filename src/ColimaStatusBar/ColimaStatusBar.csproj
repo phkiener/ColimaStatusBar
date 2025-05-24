@@ -4,7 +4,6 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0-macos</TargetFramework>
     <RuntimeIdentifiers>osx-x64;osx-arm64</RuntimeIdentifiers>
-    <AssemblyVersion>3.1.0</AssemblyVersion>
   </PropertyGroup>
   
   <PropertyGroup Label="Publish">
