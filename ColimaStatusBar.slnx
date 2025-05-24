@@ -13,6 +13,5 @@
   <Folder Name="/Core/">
     <Project Path="src/ColimaStatusBar.Core.Abstractions/ColimaStatusBar.Core.Abstractions.csproj" />
     <Project Path="src/ColimaStatusBar.Core/ColimaStatusBar.Core.csproj" />
-    <Project Path="test/ColimaStatusBar.Core.Test/ColimaStatusBar.Core.Test.csproj" />
   </Folder>
 </Solution>
