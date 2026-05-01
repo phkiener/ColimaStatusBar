@@ -1,4 +1,4 @@
-![Screenshot](doc/screenshot.png)
+![Screenshot](docs/screenshot.png)
 
 ---
 
