@@ -8,16 +8,16 @@ public sealed class RunningContainersControl(IDocker docker, IDispatcher dispatc
 {
     private readonly NSMenuItem noContainersItem = new("No containers running") { Enabled = false, Hidden = true };
     private readonly Dictionary<string, NSMenuItem> containers = new();
-    
+
     protected override void OnAttach(NSMenu target)
     {
         target.AddItem(noContainersItem);
-        
+
         Binder.BindControl(target)
             .To<ContainerAdded>(OnContainerAdded)
             .To<ContainerRemoved>(OnContainerRemoved)
             .To<ContainerStatusChanged>(OnContainerStatusChanged);
-        
+
         Binder.BindControl(noContainersItem)
             .To<ContainerAdded>(UpdatePlaceholderItem)
             .To<ContainerRemoved>(UpdatePlaceholderItem)
@@ -52,7 +52,7 @@ public sealed class RunningContainersControl(IDocker docker, IDispatcher dispatc
         {
             return;
         }
-        
+
         var menuItem = containers.GetValueOrDefault(containerRemoved.Id);
         if (menuItem is null)
         {
@@ -87,7 +87,7 @@ public sealed class RunningContainersControl(IDocker docker, IDispatcher dispatc
         menuItem.Submenu.AddItem(new NSMenuItem("Start", (_, _) => Dispatcher.Dispatch(new Commands.StartContainer(container.Id))));
         menuItem.Submenu.AddItem(new NSMenuItem("Stop", (_, _) => Dispatcher.Dispatch(new Commands.StopContainer(container.Id))));
         menuItem.Submenu.AddItem(new NSMenuItem("Remove", (_, _) => Dispatcher.Dispatch(new Commands.RemoveContainer(container.Id))));
-        
+
         containers.Add(container.Id, menuItem);
 
         var index = menu.IndexOf(noContainersItem);
@@ -114,10 +114,10 @@ public sealed class RunningContainersControl(IDocker docker, IDispatcher dispatc
     {
         item.Hidden = docker.RunningContainers.Any();
     }
-    
+
     private static void CopyToClipboard(string text)
     {
         NSPasteboard.GeneralPasteboard.ClearContents();
-        NSPasteboard.GeneralPasteboard.SetDataForType(NSData.FromString(text), NSPasteboardType.String.GetConstant());
+        NSPasteboard.GeneralPasteboard.SetDataForType(NSData.FromString(text), NSPasteboardType.String.GetConstant()!);
     }
 }
